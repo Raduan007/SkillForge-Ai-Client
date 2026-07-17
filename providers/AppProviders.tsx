@@ -20,20 +20,6 @@ const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = React.useState<Theme>("light");
 
-  // Sync theme setting on mount from LocalStorage or system setting
-  React.useEffect(() => {
-    const savedTheme = localStorage.getItem("skillforge-theme") as Theme;
-    if (savedTheme === "light" || savedTheme === "dark") {
-      setThemeState(savedTheme);
-      updateDocumentClass(savedTheme);
-    } else {
-      // System default fallback
-      const systemPreference = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-      setThemeState(systemPreference);
-      updateDocumentClass(systemPreference);
-    }
-  }, []);
-
   const updateDocumentClass = (activeTheme: Theme) => {
     const root = window.document.documentElement;
     if (activeTheme === "dark") {
@@ -46,6 +32,22 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.style.setProperty("--foreground", "#0F172A");
     }
   };
+
+  // Sync theme setting on mount from LocalStorage or system setting
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem("skillforge-theme") as Theme;
+    if (savedTheme === "light" || savedTheme === "dark") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setThemeState(savedTheme);
+      updateDocumentClass(savedTheme);
+    } else {
+      // System default fallback
+      const systemPreference = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setThemeState(systemPreference);
+      updateDocumentClass(systemPreference);
+    }
+  }, []);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

@@ -2,7 +2,7 @@
  * Reusable utility helpers for debounce and throttle.
  */
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any
 type AnyFunction = (...args: any[]) => any;
 
 /**

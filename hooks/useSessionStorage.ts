@@ -17,6 +17,7 @@ export function useSessionStorage<T>(
   useEffect(() => {
     const item = safeSessionStorage.getItem<T>(key);
     if (item !== null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStoredValue(item);
     }
   }, [key]);

@@ -1,30 +1,22 @@
 "use client";
 
 import * as React from "react";
-import { SlidersHorizontal, X, LayoutGrid, Info, Search } from "lucide-react";
+import { SlidersHorizontal, X, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PageWrapper, Section, Container, Grid, Flex } from "@/components/layout/Layouts";
+import { useRouter, useSearchParams } from "next/navigation";
+import { PageWrapper, Section, Container, Flex } from "@/components/layout/Layouts";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { FilterPanel } from "@/components/shared/FilterPanel";
 import { SortDropdown } from "@/components/shared/SortDropdown";
 import { Pagination } from "@/components/shared/Pagination";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { toast } from "react-hot-toast";
 import { cn } from "@/utils/cn";
-
-interface RoadmapMock {
-  id: string;
-  title: string;
-  description: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  duration: string;
-  rating: number;
-  category: string;
-  imageSrc: string;
-}
+import { useDebounce } from "@/hooks/useDebounce";
+import { useRoadmaps } from "@/hooks/useRoadmaps";
 
 export default function ExplorePage() {
+  const router = useRouter();
   // Mobile drawer filter visibility state
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = React.useState(false);
   
@@ -35,140 +27,44 @@ export default function ExplorePage() {
   const [isSkeleton, setIsSkeleton] = React.useState(false);
   const [isEmpty, setIsEmpty] = React.useState(false);
 
-  // Pagination state tracking
+  // API State tracking
   const [currentPage, setCurrentPage] = React.useState(1);
-  const totalPages = 8;
+  const [searchVal, setSearchVal] = React.useState("");
+  const [sortVal, setSortVal] = React.useState("newest");
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
+  const [selectedDifficulties, setSelectedDifficulties] = React.useState<string[]>([]);
 
-  // 12 Mock Careers Roadmap Data
-  const mockRoadmaps: RoadmapMock[] = [
-    {
-      id: "rm-1",
-      title: "Frontend Developer",
-      description: "Master HTML, CSS, JavaScript, React, Tailwind CSS, and state libraries to build highly interactive client-side web applications.",
-      difficulty: "Beginner",
-      duration: "6 Months",
-      rating: 4.8,
-      category: "Frontend",
-      imageSrc: "/careers/full-stack-developer.png",
-    },
-    {
-      id: "rm-2",
-      title: "Backend API Engineer",
-      description: "Learn Node.js, Express, databases (SQL & NoSQL), API integrations, authorization systems, and server configuration guidelines.",
-      difficulty: "Intermediate",
-      duration: "7 Months",
-      rating: 4.9,
-      category: "Backend",
-      imageSrc: "/careers/data-scientist.png",
-    },
-    {
-      id: "rm-3",
-      title: "Data Science & AI Analyst",
-      description: "Explore datasets, construct statistics pipelines, clean data, and deploy deep learning models using Python and TensorFlow.",
-      difficulty: "Advanced",
-      duration: "8 Months",
-      rating: 4.9,
-      category: "Data Science",
-      imageSrc: "/careers/data-scientist.png",
-    },
-    {
-      id: "rm-4",
-      title: "UI/UX Product Designer",
-      description: "Learn graphic fundamentals, conduct research user interviews, wireframe paths, and create design systems inside Figma.",
-      difficulty: "Beginner",
-      duration: "4 Months",
-      rating: 4.7,
-      category: "Design",
-      imageSrc: "/careers/ui-ux-designer.png",
-    },
-    {
-      id: "rm-5",
-      title: "Cloud & DevOps Architect",
-      description: "Implement continuous integrations pipelines, dockerize systems, and manage Kubernetes clusters on AWS cloud environments.",
-      difficulty: "Advanced",
-      duration: "7 Months",
-      rating: 4.9,
-      category: "DevOps",
-      imageSrc: "/careers/cloud-architect.png",
-    },
-    {
-      id: "rm-6",
-      title: "Mobile Apps Developer",
-      description: "Construct native mobile platforms using React Native, manage phone storage, and deploy updates to iOS and Android App stores.",
-      difficulty: "Intermediate",
-      duration: "6 Months",
-      rating: 4.6,
-      category: "Mobile",
-      imageSrc: "/careers/full-stack-developer.png",
-    },
-    {
-      id: "rm-7",
-      title: "Cybersecurity Specialist",
-      description: "Audit security protocols, scan network vulnerabilities, patch servers, and verify encryption compliance across web configurations.",
-      difficulty: "Intermediate",
-      duration: "5 Months",
-      rating: 4.8,
-      category: "Security",
-      imageSrc: "/careers/data-scientist.png",
-    },
-    {
-      id: "rm-8",
-      title: "DevSecOps Engineer",
-      description: "Secure deploy pipelines, write automated test cases, scan build files, and manage identity configurations on Kubernetes setups.",
-      difficulty: "Advanced",
-      duration: "8 Months",
-      rating: 4.9,
-      category: "DevOps",
-      imageSrc: "/careers/cloud-architect.png",
-    },
-    {
-      id: "rm-9",
-      title: "Machine Learning Engineer",
-      description: "Train complex deep neural networks, optimize model latency, build vector database systems, and integrate generative LLM interfaces.",
-      difficulty: "Advanced",
-      duration: "9 Months",
-      rating: 4.9,
-      category: "Data Science",
-      imageSrc: "/careers/data-scientist.png",
-    },
-    {
-      id: "rm-10",
-      title: "Technical Product Manager",
-      description: "Coordinate development sprints, write engineering requirement documents, draft user profiles, and audit feature KPI analytics.",
-      difficulty: "Beginner",
-      duration: "3 Months",
-      rating: 4.5,
-      category: "Product",
-      imageSrc: "/careers/ui-ux-designer.png",
-    },
-    {
-      id: "rm-11",
-      title: "Quality Assurance Analyst",
-      description: "Write automated E2E test scripts, perform regression audits, write error reports, and confirm performance metric passes.",
-      difficulty: "Beginner",
-      duration: "4 Months",
-      rating: 4.6,
-      category: "QA",
-      imageSrc: "/careers/full-stack-developer.png",
-    },
-    {
-      id: "rm-12",
-      title: "Solutions Enterprise Architect",
-      description: "Design cloud scaling layouts, map high-availability structures, audit platform security frameworks, and direct resource migration.",
-      difficulty: "Intermediate",
-      duration: "6 Months",
-      rating: 4.8,
-      category: "Architect",
-      imageSrc: "/careers/cloud-architect.png",
-    },
-  ];
+  // Sync category parameter from routing context (e.g. Featured Path homepage click)
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category");
 
-  const handleCardDetails = (title: string) => {
-    toast.success(`Details for "${title}" will load in the upcoming curriculum modules!`, {
-      icon: "🎯",
-      id: "card-details-toast",
-    });
-  };
+  React.useEffect(() => {
+    if (categoryParam) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedCategories([categoryParam]);
+    }
+  }, [categoryParam]);
+
+  // Debounced search query tracker
+  const debouncedSearch = useDebounce(searchVal, 400);
+
+  // TanStack Query custom hook integration
+  const { data, isLoading, isError } = useRoadmaps({
+    page: currentPage,
+    limit: 12,
+    search: debouncedSearch,
+    category: selectedCategories.join(","),
+    difficulty: selectedDifficulties.join(","),
+    sort: sortVal,
+  });
+
+  // Derived state options
+  const roadmaps = data?.roadmaps || [];
+  const totalPages = data?.pagination.pages || 1;
+  const totalResults = data?.pagination.total || 0;
+
+  const showSkeletons = isSkeleton || isLoading;
+  const showEmptyState = isEmpty || (roadmaps.length === 0 && !isLoading) || isError;
 
 
 
@@ -226,15 +122,12 @@ export default function ExplorePage() {
           {/* ================= Top controls row ================= */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
             
-            {/* Search Input Placeholder */}
+            {/* Search Input */}
             <div className="flex-1 max-w-md">
               <SearchBar
                 onSearch={(query) => {
-                  if (query) {
-                    toast.success(`Search query "${query}" received (Simulated)`, {
-                      id: "search-toast",
-                    });
-                  }
+                  setSearchVal(query);
+                  setCurrentPage(1);
                 }}
               />
             </div>
@@ -258,11 +151,10 @@ export default function ExplorePage() {
 
               {/* Sort Select components */}
               <SortDropdown
-                value="newest"
+                value={sortVal}
                 onChange={(val) => {
-                  toast.success(`Sorting option changed to "${val}" (Simulated)`, {
-                    id: "sort-toast",
-                  });
+                  setSortVal(val);
+                  setCurrentPage(1);
                 }}
               />
 
@@ -281,7 +173,7 @@ export default function ExplorePage() {
           {/* Results count label */}
           <div className="flex items-center justify-between border-b border-border-color dark:border-slate-800/40 pb-4 mb-6">
             <span className="text-xs font-bold text-secondary-text">
-              {isEmpty ? "Showing 0 matches" : `Showing ${mockRoadmaps.length} career paths matched`}
+              {showEmptyState ? "Showing 0 matches" : `Showing ${totalResults} career paths matched`}
             </span>
           </div>
 
@@ -293,12 +185,18 @@ export default function ExplorePage() {
               <aside className="hidden md:block md:col-span-3 bg-white dark:bg-[#090d16] border border-border-color dark:border-slate-800/40 p-6 rounded-xl shadow-xs">
                 <FilterPanel
                   onApply={(filters) => {
-                    toast.success("Applying filter configuration (Simulated)", {
+                    setSelectedCategories(filters.categories);
+                    setSelectedDifficulties(filters.difficulties);
+                    setCurrentPage(1);
+                    toast.success("Filters applied successfully!", {
                       id: "filter-apply-toast",
                     });
                   }}
                   onReset={() => {
-                    toast.success("Filter settings cleared (Simulated)", {
+                    setSelectedCategories([]);
+                    setSelectedDifficulties([]);
+                    setCurrentPage(1);
+                    toast.success("Filters cleared successfully!", {
                       id: "filter-reset-toast",
                     });
                   }}
@@ -310,13 +208,13 @@ export default function ExplorePage() {
             <main className={cn(showDesktopFilters ? "md:col-span-9" : "md:col-span-12", "flex flex-col gap-8")}>
               
               {/* Dynamic Empty / Skeletons / Cards Content */}
-              {isEmpty ? (
+              {showEmptyState ? (
                 /* Empty state render */
                 <Card
                   isEmpty={true}
                   emptyIcon={Info}
                   emptyTitle="No Roadmaps Found"
-                  emptyDescription="We couldn't find any career roadmaps matching your active filter configuration. Clear check boxes and try again."
+                  emptyDescription="We couldn't find any career roadmaps matching your active filter configuration. Clear checkboxes and try again."
                   className="py-16 border-dashed border-border-color dark:border-slate-800/50"
                 />
               ) : (
@@ -328,34 +226,51 @@ export default function ExplorePage() {
                     showDesktopFilters ? "lg:grid-cols-3" : "lg:grid-cols-4"
                   )}
                 >
-                  {mockRoadmaps.map((roadmap) => (
-                    <div key={roadmap.id} className="flex flex-col h-full w-full">
-                      <Card
-                        isSkeleton={isSkeleton}
-                        imageSrc={roadmap.imageSrc}
-                        imageAlt={roadmap.title}
-                        title={roadmap.title}
-                        description={roadmap.description}
-                        metadata={[roadmap.difficulty, roadmap.duration, `★ ${roadmap.rating.toFixed(1)}`, roadmap.category]}
-                        actionLabel="View Details"
-                        onAction={() => handleCardDetails(roadmap.title)}
-                        className="h-full border-border-color/60 dark:border-slate-800/40"
-                      />
-                    </div>
-                  ))}
+                  {showSkeletons ? (
+                    // Render 6 skeleton cards
+                    Array.from({ length: 6 }).map((_, idx) => (
+                      <div key={idx} className="flex flex-col h-full w-full">
+                        <Card
+                          isSkeleton={true}
+                          imageSrc=""
+                          imageAlt=""
+                          title=""
+                          description=""
+                          metadata={[]}
+                          actionLabel=""
+                          className="h-full border-border-color/60 dark:border-slate-800/40"
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    // Render loaded MongoDB roadmaps
+                    roadmaps.map((roadmap) => (
+                      <div key={roadmap._id} className="flex flex-col h-full w-full">
+                        <Card
+                          isSkeleton={false}
+                          imageSrc={roadmap.coverImage}
+                          imageAlt={roadmap.title}
+                          title={roadmap.title}
+                          description={roadmap.shortDescription}
+                          metadata={[roadmap.difficulty, roadmap.duration, `★ ${roadmap.rating.toFixed(1)}`, roadmap.category]}
+                          actionLabel="View Details"
+                          onAction={() => router.push(`/explore/${roadmap.slug}`)}
+                          className="h-full border-border-color/60 dark:border-slate-800/40"
+                        />
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
 
               {/* ================= Pagination Section Placeholder ================= */}
-              {!isEmpty && (
+              {!showEmptyState && (
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={(page) => {
                     setCurrentPage(page);
-                    toast.success(`Navigating to page ${page} (Simulated)`, {
-                      id: "pagination-toast",
-                    });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                 />
               )}
@@ -400,16 +315,22 @@ export default function ExplorePage() {
 
               <FilterPanel
                 onApply={(filters) => {
-                  toast.success("Applying filter configuration (Simulated)", {
+                  setSelectedCategories(filters.categories);
+                  setSelectedDifficulties(filters.difficulties);
+                  setCurrentPage(1);
+                  setIsFilterDrawerOpen(false);
+                  toast.success("Filters applied successfully!", {
                     id: "filter-apply-toast",
                   });
-                  setIsFilterDrawerOpen(false);
                 }}
                 onReset={() => {
-                  toast.success("Filter settings cleared (Simulated)", {
+                  setSelectedCategories([]);
+                  setSelectedDifficulties([]);
+                  setCurrentPage(1);
+                  setIsFilterDrawerOpen(false);
+                  toast.success("Filters cleared successfully!", {
                     id: "filter-reset-toast",
                   });
-                  setIsFilterDrawerOpen(false);
                 }}
               />
             </motion.div>

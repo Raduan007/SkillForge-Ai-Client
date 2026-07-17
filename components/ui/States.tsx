@@ -264,7 +264,7 @@ export const NoInternetState: React.FC<{ onRetry?: () => void; className?: strin
       </div>
       <h3 className="text-base font-bold text-dark-text">Unable to connect</h3>
       <p className="text-xs text-secondary-text mt-1.5 mb-4 max-w-xs leading-relaxed">
-        We can't establish a network socket connection to the SkillForge AI server. Please verify your internet router connection or check if the server is offline.
+        We can&apos;t establish a network socket connection to the SkillForge AI server. Please verify your internet router connection or check if the server is offline.
       </p>
       <ul className="text-xxs text-secondary-text text-left max-w-xs bg-white border border-border-color rounded-lg p-3 flex flex-col gap-1.5 mb-5">
         <li className="flex items-center gap-1.5">

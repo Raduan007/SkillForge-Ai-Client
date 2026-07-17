@@ -9,23 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { toast } from "react-hot-toast";
 import { cn } from "@/utils/cn";
-
-interface RoadmapDetail {
-  id: string;
-  title: string;
-  category: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  duration: string;
-  rating: number;
-  reviewsCount: number;
-  shortDescription: string;
-  fullDescription: string;
-  skills: string[];
-  outcomes: string[];
-  imageSrc: string;
-  modulesCount: number;
-  projectsCount: number;
-}
+import { useRoadmapBySlug, useRoadmaps } from "@/hooks/useRoadmaps";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -35,203 +19,17 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
   // Unwrap Next.js 16 dynamic route parameters
   const { id } = React.use(params);
 
-  // Simulated related loading state
-  const [isRelatedLoading, setIsRelatedLoading] = React.useState(true);
+  // TanStack Query hooks integration
+  const { data: roadmap, isLoading: isLoadingDetail, isError: isDetailError } = useRoadmapBySlug(id);
+  const { data: relatedData, isLoading: isRelatedLoading } = useRoadmaps({ limit: 5 });
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsRelatedLoading(false);
-    }, 700);
-    return () => clearTimeout(timer);
-  }, [id]);
-
-  // Related Roadmaps Db
-  const relatedDb = [
-    {
-      id: "rm-1",
-      title: "Frontend Developer",
-      difficulty: "Beginner" as const,
-      duration: "6 Months",
-      rating: 4.8,
-      category: "Frontend",
-      imageSrc: "/careers/full-stack-developer.png",
-    },
-    {
-      id: "rm-2",
-      title: "Backend API Engineer",
-      difficulty: "Intermediate" as const,
-      duration: "7 Months",
-      rating: 4.9,
-      category: "Backend",
-      imageSrc: "/careers/data-scientist.png",
-    },
-    {
-      id: "rm-3",
-      title: "Data Science & AI Analyst",
-      difficulty: "Advanced" as const,
-      duration: "8 Months",
-      rating: 4.9,
-      category: "Data Science",
-      imageSrc: "/careers/data-scientist.png",
-    },
-    {
-      id: "rm-4",
-      title: "UI/UX Product Designer",
-      difficulty: "Beginner" as const,
-      duration: "4 Months",
-      rating: 4.7,
-      category: "Design",
-      imageSrc: "/careers/ui-ux-designer.png",
-    },
-    {
-      id: "rm-5",
-      title: "Cloud & DevOps Architect",
-      difficulty: "Advanced" as const,
-      duration: "7 Months",
-      rating: 4.9,
-      category: "DevOps",
-      imageSrc: "/careers/cloud-architect.png",
-    },
-  ];
-
-  const relatedRoadmaps = relatedDb.filter((rm) => rm.id !== id).slice(0, 4);
-
-  // 12 Mock Detailed Roadmaps mapping
-  const roadmapsDb: Record<string, RoadmapDetail> = {
-    "rm-1": {
-      id: "rm-1",
-      title: "Frontend Developer Roadmap",
-      category: "Frontend",
-      difficulty: "Beginner",
-      duration: "6 Months",
-      rating: 4.8,
-      reviewsCount: 1240,
-      shortDescription: "Master HTML, CSS, JavaScript, React, Tailwind CSS, and state libraries to build highly interactive client-side web applications.",
-      fullDescription: "Become a proficient frontend developer. This pathway guides you from absolute code layout structures up through configuring component architectures inside modern React systems. You will learn to write semantic HTML markup, manage complex typography variables, style layouts using CSS Grid and Flexbox, write asynchronous JS API requests, and optimize client-side bundle performance.",
-      skills: ["Semantic HTML5 & DOM API", "CSS Flexbox & CSS Grid", "JavaScript (ES6+) & Async/Await", "React Framework & Hooks", "Tailwind CSS Styling", "State Management (Redux/Zustand)", "Git & Collaborative Version Control", "Webpack & Vite Bundle Tools"],
-      outcomes: [
-        "Build responsive, pixel-perfect websites conforming to Figma visual layouts.",
-        "Manage application states dynamically with Redux Toolkit or Zustand.",
-        "Configure, deploy, and inspect client-side bundles on hosting platforms like Vercel.",
-        "Audit and optimize site performance score indicators to hit 95+ Lighthouse metrics."
-      ],
-      imageSrc: "/careers/full-stack-developer.png",
-      modulesCount: 16,
-      projectsCount: 8,
-    },
-    "rm-2": {
-      id: "rm-2",
-      title: "Backend API Engineer",
-      category: "Backend",
-      difficulty: "Intermediate",
-      duration: "7 Months",
-      rating: 4.9,
-      reviewsCount: 940,
-      shortDescription: "Learn Node.js, Express, databases (SQL & NoSQL), API integrations, authorization systems, and server configuration guidelines.",
-      fullDescription: "Construct resilient backends. This curriculum is designed to explore the server architectures that power modern web platforms. You will learn how to initialize server ports, map REST API routes, secure endpoints with JWT validations, construct database models, write queries, and dockerize systems to deploy onto cloud nodes.",
-      skills: ["Node.js & Express Framework", "SQL Databases (PostgreSQL)", "NoSQL Databases (MongoDB)", "RESTful API Design Standards", "GraphQL Schemas", "Authentication (JWT & OAuth)", "Docker Containerization", "Jest Integration Testing"],
-      outcomes: [
-        "Create scalable API backend microservices supporting high concurrency.",
-        "Implement secure, stateless authentication tokens and cookie schemes.",
-        "Design relational database schemas with complex joins and indexes.",
-        "Write integration test suites covering API router path scenarios."
-      ],
-      imageSrc: "/careers/data-scientist.png",
-      modulesCount: 14,
-      projectsCount: 6,
-    },
-    "rm-3": {
-      id: "rm-3",
-      title: "Data Science & AI Analyst",
-      category: "Data Science",
-      difficulty: "Advanced",
-      duration: "8 Months",
-      rating: 4.9,
-      reviewsCount: 780,
-      shortDescription: "Explore datasets, construct statistics pipelines, clean data, and deploy deep learning models using Python and TensorFlow.",
-      fullDescription: "Deep dive into data mining. You will study statistical mathematical paradigms, program complex pipelines, train neural networks, and extract patterns to drive corporate intelligence decisions.",
-      skills: ["Python (Pandas, NumPy)", "Data Cleaning & Wrangling", "Statistical Calculations", "Scikit-Learn Classifiers", "TensorFlow & PyTorch Models", "SQL Queries & Aggregations", "Data Visualization (Matplotlib)", "Jupyter Labs Workflows"],
-      outcomes: [
-        "Construct data wrangling scripts to clean and parse messy raw logs.",
-        "Train predictive machine learning classifiers to forecast metrics.",
-        "Evaluate model performance metrics (precision, recall, ROC-AUC).",
-        "Deploy model files behind API endpoints for client integrations."
-      ],
-      imageSrc: "/careers/data-scientist.png",
-      modulesCount: 18,
-      projectsCount: 10,
-    },
-    "rm-4": {
-      id: "rm-4",
-      title: "UI/UX Product Designer",
-      category: "Design",
-      difficulty: "Beginner",
-      duration: "4 Months",
-      rating: 4.7,
-      reviewsCount: 1120,
-      shortDescription: "Learn graphic fundamentals, conduct research user interviews, wireframe paths, and create design systems inside Figma.",
-      fullDescription: "Design intuitive interfaces. This pathway guides you through graphic layouts, user interface typography, component layouts, wireframing prototypes, and performing usability testing with real users.",
-      skills: ["User Experience Research", "Wireframing & Prototyping", "Design System Components", "Typography & Color Hierarchies", "Figma Advanced Features", "Usability Audit & Testing", "Visual Hierarchy Mappings", "Developer Handoff Workflows"],
-      outcomes: [
-        "Conduct user research interviews and compile persona profiles.",
-        "Construct high-fidelity interactive visual prototypes in Figma.",
-        "Maintain scalable design systems using Figma variables and auto layouts.",
-        "Design visual guidelines for landing screens, checkout processes, and dashboards."
-      ],
-      imageSrc: "/careers/ui-ux-designer.png",
-      modulesCount: 12,
-      projectsCount: 5,
-    },
-    "rm-5": {
-      id: "rm-5",
-      title: "Cloud & DevOps Architect",
-      category: "DevOps",
-      difficulty: "Advanced",
-      duration: "7 Months",
-      rating: 4.9,
-      reviewsCount: 650,
-      shortDescription: "Implement continuous integrations pipelines, dockerize systems, and manage Kubernetes clusters on AWS cloud environments.",
-      fullDescription: "Automate system operations. Learn to configure auto-scaling cloud compute clusters, trace performance logs, manage networks, and secure server accesses using modern automation script languages.",
-      skills: ["AWS Cloud Components", "Docker Container Engines", "Kubernetes Orchestrations", "CI/CD (GitHub Actions/Jenkins)", "Infrastructure as Code (Terraform)", "Linux System Administrations", "Prometheus & Grafana Logs", "Network Configurations & VPCs"],
-      outcomes: [
-        "Provision cloud resources dynamically using Terraform state files.",
-        "Configure automated pipelines to build, test, and host applications.",
-        "Deploy highly available, auto-scaling Kubernetes cluster structures.",
-        "Diagnose cluster bottlenecks using Grafana metrics dashboards."
-      ],
-      imageSrc: "/careers/cloud-architect.png",
-      modulesCount: 15,
-      projectsCount: 7,
-    }
-  };
-
-  // Fallback default roadmap if ID matches another segment
-  const defaultRoadmap: RoadmapDetail = {
-    id: id || "rm-default",
-    title: "Technical Solutions Architect",
-    category: "Solutions Architecture",
-    difficulty: "Advanced",
-    duration: "6 Months",
-    rating: 4.8,
-    reviewsCount: 420,
-    shortDescription: "Design enterprise cloud scaling layouts, map highly-available microservice divisions, and audit security compliance scopes.",
-    fullDescription: "Model enterprise systems. Learn how to map high-level visual server layouts, coordinate migration pipelines, audit security parameters, and plan load-balancing architectures to host high-concurrency systems.",
-    skills: ["System Architecture Design", "Microservices Design", "Cloud Infrastructure (AWS/GCP)", "Enterprise Database Sharding", "Network Latency Optimizations", "High-Availability Deployments", "Regulatory Compliance (GDPR/HIPAA)", "Load Balancing & Caching Strategies"],
-    outcomes: [
-      "Draft visual blueprints representing scalable microservice architectures.",
-      "Design multi-region cloud cluster maps to guarantee 99.99% uptime.",
-      "Implement relational database sharding configurations to handle high volumes.",
-      "Optimize data caching schemes using Redis to lower latency metrics."
-    ],
-    imageSrc: "/careers/cloud-architect.png",
-    modulesCount: 16,
-    projectsCount: 6,
-  };
-
-  // Resolve matching DB key or default fallback
-  const roadmap = roadmapsDb[id] || defaultRoadmap;
+  // Map related roadmaps dynamically (filtering out active details view slug)
+  const relatedRoadmaps = (relatedData?.roadmaps || [])
+    .filter((rm) => rm.slug !== roadmap?.slug)
+    .slice(0, 4);
 
   const handleEnroll = () => {
+    if (!roadmap) return;
     toast.success(`Successfully enrolled in "${roadmap.title}"! Course assets have been loaded.`, {
       icon: "🎉",
       id: "enroll-toast",
@@ -248,7 +46,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
   };
 
   // Difficulty styling configurations
-  const getDifficultyColor = (level: RoadmapDetail["difficulty"]) => {
+  const getDifficultyColor = (level: "Beginner" | "Intermediate" | "Advanced") => {
     switch (level) {
       case "Beginner":
         return "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30";
@@ -258,6 +56,34 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
         return "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border-red-100 dark:border-red-900/30";
     }
   };
+
+  if (isLoadingDetail) {
+    return (
+      <PageWrapper className="bg-slate-50 dark:bg-[#090d16] flex items-center justify-center min-h-screen select-none">
+        <Flex direction="col" align="center" gap={4} className="text-center">
+          <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs font-bold text-secondary-text">Retrieving roadmap details...</span>
+        </Flex>
+      </PageWrapper>
+    );
+  }
+
+  if (isDetailError || !roadmap) {
+    return (
+      <PageWrapper className="bg-slate-50 dark:bg-[#090d16] flex items-center justify-center min-h-screen select-none">
+        <Flex direction="col" align="center" gap={4} className="text-center max-w-sm px-6">
+          <div className="h-12 w-12 rounded-full bg-red-50 dark:bg-red-950/20 text-red-500 flex items-center justify-center font-bold text-lg">!</div>
+          <h2 className="text-sm font-black text-dark-text uppercase tracking-wider">Error Loading Details</h2>
+          <p className="text-xxs text-secondary-text leading-relaxed">
+            We couldn&apos;t resolve this roadmap pathway slug database entry. Verify your link parameters or check server status.
+          </p>
+          <Link href="/explore" className="text-xs font-bold text-primary hover:underline">
+            Return to Explorer
+          </Link>
+        </Flex>
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper className="bg-slate-50 dark:bg-[#090d16] select-none min-h-screen">
@@ -322,7 +148,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                   <Flex align="center" gap={1} className="text-amber-500">
                     <Star className="h-4 w-4 fill-current" />
                     <span className="text-dark-text">{roadmap.rating.toFixed(1)}</span>
-                    <span className="text-secondary-text">({roadmap.reviewsCount} reviews)</span>
+                    <span className="text-secondary-text">({roadmap.totalRatings || 0} reviews)</span>
                   </Flex>
                 </Flex>
 
@@ -368,7 +194,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                   </h2>
 
                   <div className="flex flex-col gap-3">
-                    {roadmap.outcomes.map((outcome, idx) => (
+                    {roadmap.learningOutcomes?.map((outcome, idx) => (
                       <Flex key={idx} align="start" gap={2}>
                         <CheckCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
                         <span className="text-xs text-secondary-text leading-normal">{outcome}</span>
@@ -400,7 +226,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                       ))}
                     </Flex>
                     <span className="text-xxs font-bold text-secondary-text">
-                      Based on {roadmap.reviewsCount} ratings
+                      Based on {roadmap.totalRatings || 0} ratings
                     </span>
                   </div>
 
@@ -549,11 +375,11 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                   </Flex>
                   <Flex align="center" justify="between" className="text-xs border-b border-slate-50 dark:border-slate-850 pb-2">
                     <span className="text-secondary-text font-bold">Curriculum Modules:</span>
-                    <span className="text-dark-text font-extrabold">{roadmap.modulesCount} modules</span>
+                    <span className="text-dark-text font-extrabold">{roadmap.skills ? roadmap.skills.length * 2 : 12} modules</span>
                   </Flex>
                   <Flex align="center" justify="between" className="text-xs border-b border-slate-50 dark:border-slate-850 pb-2">
                     <span className="text-secondary-text font-bold">Practical Projects:</span>
-                    <span className="text-dark-text font-extrabold">{roadmap.projectsCount} builds</span>
+                    <span className="text-dark-text font-extrabold">{roadmap.learningOutcomes ? roadmap.learningOutcomes.length : 6} builds</span>
                   </Flex>
                   <Flex align="center" justify="between" className="text-xs">
                     <span className="text-secondary-text font-bold">Milestone Badges:</span>
@@ -608,10 +434,10 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
           {/* Cards Grid */}
           <Grid cols={1} colsSm={2} colsLg={4} gap={5}>
             {relatedRoadmaps.map((rm) => (
-              <Link href={`/explore/${rm.id}`} key={rm.id} className="flex flex-col h-full w-full">
+              <Link href={`/explore/${rm.slug}`} key={rm._id} className="flex flex-col h-full w-full">
                 <Card
                   isSkeleton={isRelatedLoading}
-                  imageSrc={rm.imageSrc}
+                  imageSrc={rm.coverImage}
                   imageAlt={rm.title}
                   title={rm.title}
                   description=""

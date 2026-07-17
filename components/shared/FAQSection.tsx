@@ -84,7 +84,7 @@ export default function FAQSection() {
           <div className="flex flex-col gap-1">
             <h3 className="text-sm font-extrabold text-dark-text">Still have questions?</h3>
             <p className="text-xxs text-secondary-text leading-normal max-w-md">
-              Can't find the answers you're looking for? Reach out directly to our student support team for assistance.
+              Can&apos;t find the answers you&apos;re looking for? Reach out directly to our student support team for assistance.
             </p>
           </div>
           <Link href="/contact" passHref legacyBehavior>
