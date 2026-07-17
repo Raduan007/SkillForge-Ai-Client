@@ -1,4 +1,6 @@
 import FeaturedCareers from "@/components/shared/FeaturedCareers";
+import FeaturesSection from "@/components/shared/FeaturesSection";
+import StatsSection from "@/components/shared/StatsSection";
 import { Container, PageWrapper } from "@/components/layout/Layouts";
 import { Compass } from "lucide-react";
 
@@ -22,6 +24,12 @@ export default function Home() {
 
       {/* Featured Career Paths Section */}
       <FeaturedCareers />
+
+      {/* Platform Capabilities Section */}
+      <FeaturesSection />
+
+      {/* Platform Metrics Statistics Section */}
+      <StatsSection />
     </PageWrapper>
   );
 }

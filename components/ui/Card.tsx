@@ -20,6 +20,7 @@ export interface CardProps {
   emptyTitle?: string;
   emptyDescription?: string;
   className?: string;
+  icon?: React.ComponentType<{ className?: string }>;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -37,6 +38,7 @@ const Card: React.FC<CardProps> = ({
   emptyTitle = "No data available",
   emptyDescription = "There is currently no information to display in this card.",
   className,
+  icon: Icon,
 }) => {
   // 1. SKELETON STATE RENDERER
   if (isSkeleton) {
@@ -114,6 +116,15 @@ const Card: React.FC<CardProps> = ({
             alt={imageAlt}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
+        </div>
+      )}
+
+      {/* Card Icon Header */}
+      {Icon && !imageSrc && (
+        <div className="pt-5 px-5 shrink-0 select-none">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/25 text-primary">
+            <Icon className="h-5 w-5" />
+          </div>
         </div>
       )}
 
