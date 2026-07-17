@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PageWrapper, Section, Container, Grid, Flex } from "@/components/layout/Layouts";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { FilterPanel } from "@/components/shared/FilterPanel";
-import { Select } from "@/components/ui/Select";
+import { SortDropdown } from "@/components/shared/SortDropdown";
+import { Pagination } from "@/components/shared/Pagination";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { toast } from "react-hot-toast";
@@ -33,6 +34,10 @@ export default function ExplorePage() {
   // Mock State Toggles (for visual reviews)
   const [isSkeleton, setIsSkeleton] = React.useState(false);
   const [isEmpty, setIsEmpty] = React.useState(false);
+
+  // Pagination state tracking
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const totalPages = 8;
 
   // 12 Mock Careers Roadmap Data
   const mockRoadmaps: RoadmapMock[] = [
@@ -252,15 +257,14 @@ export default function ExplorePage() {
               </button>
 
               {/* Sort Select components */}
-              <div className="flex-1 md:w-56 md:flex-initial">
-                <Select defaultValue="popular" aria-label="Sort roadmaps list select dropdown">
-                  <option value="popular">Most Popular</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="newest">Newest Paths</option>
-                  <option value="difficulty-asc">Difficulty: Low to High</option>
-                  <option value="difficulty-desc">Difficulty: High to Low</option>
-                </Select>
-              </div>
+              <SortDropdown
+                value="newest"
+                onChange={(val) => {
+                  toast.success(`Sorting option changed to "${val}" (Simulated)`, {
+                    id: "sort-toast",
+                  });
+                }}
+              />
 
               {/* Mobile Filter Button toggle */}
               <button
@@ -344,30 +348,16 @@ export default function ExplorePage() {
 
               {/* ================= Pagination Section Placeholder ================= */}
               {!isEmpty && (
-                <Flex justify="center" align="center" gap={2} className="border-t border-border-color dark:border-slate-800/40 pt-6">
-                  <button
-                    type="button"
-                    disabled
-                    className="px-3.5 py-1.5 rounded-lg border border-border-color/60 dark:border-slate-800/30 text-xxs font-bold text-secondary-text bg-slate-50 dark:bg-slate-900/30 disabled:opacity-50 select-none cursor-not-allowed"
-                  >
-                    Previous
-                  </button>
-                  <button type="button" className="px-3.5 py-1.5 rounded-lg text-xxs font-bold text-white bg-primary">
-                    1
-                  </button>
-                  <button type="button" className="px-3.5 py-1.5 rounded-lg border border-border-color dark:border-slate-800 text-xxs font-bold text-dark-text hover:bg-slate-50 dark:hover:bg-slate-800/20">
-                    2
-                  </button>
-                  <button type="button" className="px-3.5 py-1.5 rounded-lg border border-border-color dark:border-slate-800 text-xxs font-bold text-dark-text hover:bg-slate-50 dark:hover:bg-slate-800/20">
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className="px-3.5 py-1.5 rounded-lg border border-border-color dark:border-slate-800 text-xxs font-bold text-dark-text hover:bg-slate-50 dark:hover:bg-slate-800/20"
-                  >
-                    Next
-                  </button>
-                </Flex>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={(page) => {
+                    setCurrentPage(page);
+                    toast.success(`Navigating to page ${page} (Simulated)`, {
+                      id: "pagination-toast",
+                    });
+                  }}
+                />
               )}
 
             </main>
