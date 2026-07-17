@@ -4,11 +4,11 @@ import * as React from "react";
 import { SlidersHorizontal, X, LayoutGrid, Info, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PageWrapper, Section, Container, Grid, Flex } from "@/components/layout/Layouts";
-import { SearchInput } from "@/components/ui/Input";
+import { SearchBar } from "@/components/shared/SearchBar";
+import { FilterPanel } from "@/components/shared/FilterPanel";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Checkbox } from "@/components/ui/Checkbox";
 import { toast } from "react-hot-toast";
 import { cn } from "@/utils/cn";
 
@@ -165,53 +165,7 @@ export default function ExplorePage() {
     });
   };
 
-  // Reusable Filter Sidebar Content Widget
-  const FilterContent = () => (
-    <div className="flex flex-col gap-6">
-      {/* Category Checkboxes */}
-      <div className="flex flex-col gap-3">
-        <span className="text-xs font-bold text-dark-text uppercase tracking-wider">Career Domain</span>
-        <div className="flex flex-col gap-2">
-          {["Frontend", "Backend", "Data Science", "Design", "DevOps", "Mobile", "Security"].map((cat) => (
-            <label key={cat} className="flex items-center gap-2 text-xs text-secondary-text font-semibold cursor-pointer select-none">
-              <Checkbox defaultChecked />
-              <span>{cat}</span>
-            </label>
-          ))}
-        </div>
-      </div>
 
-      <div className="h-[1px] bg-border-color dark:bg-slate-800" />
-
-      {/* Difficulty Checkboxes */}
-      <div className="flex flex-col gap-3">
-        <span className="text-xs font-bold text-dark-text uppercase tracking-wider">Difficulty Level</span>
-        <div className="flex flex-col gap-2">
-          {["Beginner", "Intermediate", "Advanced"].map((level) => (
-            <label key={level} className="flex items-center gap-2 text-xs text-secondary-text font-semibold cursor-pointer select-none">
-              <Checkbox defaultChecked />
-              <span>{level}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="h-[1px] bg-border-color dark:bg-slate-800" />
-
-      {/* Duration Checkboxes */}
-      <div className="flex flex-col gap-3">
-        <span className="text-xs font-bold text-dark-text uppercase tracking-wider">Roadmap Duration</span>
-        <div className="flex flex-col gap-2">
-          {["Under 3 Months", "3-6 Months", "6+ Months"].map((dur) => (
-            <label key={dur} className="flex items-center gap-2 text-xs text-secondary-text font-semibold cursor-pointer select-none">
-              <Checkbox defaultChecked />
-              <span>{dur}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <PageWrapper className="bg-slate-50 dark:bg-[#090d16] select-none min-h-screen">
@@ -269,7 +223,15 @@ export default function ExplorePage() {
             
             {/* Search Input Placeholder */}
             <div className="flex-1 max-w-md">
-              <SearchInput placeholder="Search career roadmaps..." />
+              <SearchBar
+                onSearch={(query) => {
+                  if (query) {
+                    toast.success(`Search query "${query}" received (Simulated)`, {
+                      id: "search-toast",
+                    });
+                  }
+                }}
+              />
             </div>
 
             {/* Sorting Dropdown & Desktop filters toggler */}
@@ -325,11 +287,18 @@ export default function ExplorePage() {
             {/* Desktop Filter Sidebar Column (Span 3) */}
             {showDesktopFilters && (
               <aside className="hidden md:block md:col-span-3 bg-white dark:bg-[#090d16] border border-border-color dark:border-slate-800/40 p-6 rounded-xl shadow-xs">
-                <Flex align="center" gap={2} className="mb-5">
-                  <SlidersHorizontal className="h-4 w-4 text-primary" />
-                  <span className="text-xs font-black text-dark-text uppercase tracking-widest">Filters</span>
-                </Flex>
-                <FilterContent />
+                <FilterPanel
+                  onApply={(filters) => {
+                    toast.success("Applying filter configuration (Simulated)", {
+                      id: "filter-apply-toast",
+                    });
+                  }}
+                  onReset={() => {
+                    toast.success("Filter settings cleared (Simulated)", {
+                      id: "filter-reset-toast",
+                    });
+                  }}
+                />
               </aside>
             )}
 
@@ -428,11 +397,7 @@ export default function ExplorePage() {
               transition={{ type: "spring", stiffness: 380, damping: 30 }}
               className="fixed right-0 top-0 bottom-0 w-80 bg-white dark:bg-[#090d16] shadow-xl z-55 p-6 flex flex-col gap-5 overflow-y-auto md:hidden"
             >
-              <Flex justify="between" align="center" className="border-b border-border-color dark:border-slate-800 pb-3">
-                <Flex align="center" gap={2}>
-                  <SlidersHorizontal className="h-4.5 w-4.5 text-primary" />
-                  <span className="text-xs font-black text-dark-text uppercase tracking-widest">Filter Options</span>
-                </Flex>
+              <div className="flex justify-end border-b border-border-color dark:border-slate-800 pb-3">
                 <button
                   type="button"
                   onClick={() => setIsFilterDrawerOpen(false)}
@@ -441,33 +406,22 @@ export default function ExplorePage() {
                 >
                   <X className="h-4.5 w-4.5" />
                 </button>
-              </Flex>
-
-              {/* Sidebar Content drawer */}
-              <div className="flex-1 mt-1">
-                <FilterContent />
               </div>
 
-              {/* Apply / Clear Buttons in drawer */}
-              <Flex gap={3} className="border-t border-border-color dark:border-slate-800 pt-4 mt-auto">
-                <Button
-                  variant="outline"
-                  size="medium"
-                  onClick={() => setIsFilterDrawerOpen(false)}
-                  className="flex-1 text-xs font-bold"
-                >
-                  Clear Filters
-                </Button>
-                <Button
-                  variant="primary"
-                  size="medium"
-                  onClick={() => setIsFilterDrawerOpen(false)}
-                  className="flex-1 text-xs font-bold"
-                >
-                  Apply Filters
-                </Button>
-              </Flex>
-
+              <FilterPanel
+                onApply={(filters) => {
+                  toast.success("Applying filter configuration (Simulated)", {
+                    id: "filter-apply-toast",
+                  });
+                  setIsFilterDrawerOpen(false);
+                }}
+                onReset={() => {
+                  toast.success("Filter settings cleared (Simulated)", {
+                    id: "filter-reset-toast",
+                  });
+                  setIsFilterDrawerOpen(false);
+                }}
+              />
             </motion.div>
           </>
         )}
