@@ -3,6 +3,8 @@ import FeaturesSection from "@/components/shared/FeaturesSection";
 import StatsSection from "@/components/shared/StatsSection";
 import AIFeaturesSection from "@/components/shared/AIFeaturesSection";
 import TestimonialsSection from "@/components/shared/TestimonialsSection";
+import FAQSection from "@/components/shared/FAQSection";
+import CTASection from "@/components/shared/CTASection";
 import { Container, PageWrapper } from "@/components/layout/Layouts";
 import { Compass } from "lucide-react";
 
@@ -38,6 +40,12 @@ export default function Home() {
 
       {/* Success Stories Testimonials Section */}
       <TestimonialsSection />
+
+      {/* Frequently Asked Questions FAQ Section */}
+      <FAQSection />
+
+      {/* Final Call-to-Action CTA Section */}
+      <CTASection />
     </PageWrapper>
   );
 }
