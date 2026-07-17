@@ -4,9 +4,11 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, Star, Clock, Award, BookOpen, Share2, ShieldCheck, Sparkles, CheckCircle } from "lucide-react";
 import { PageWrapper, Section, Container, Flex, Grid } from "@/components/layout/Layouts";
+import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { toast } from "react-hot-toast";
+import { cn } from "@/utils/cn";
 
 interface RoadmapDetail {
   id: string;
@@ -261,12 +263,22 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
     <PageWrapper className="bg-slate-50 dark:bg-[#090d16] select-none min-h-screen">
       
       {/* 1. Details Header Navigation Bar */}
-      <div className="bg-white dark:bg-[#090d16] py-5 border-b border-border-color dark:border-slate-800/30">
+      <div className="bg-white dark:bg-[#090d16] py-3.5 border-b border-border-color dark:border-slate-800/30">
         <Container>
-          <Link href="/explore" className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-text hover:text-primary dark:hover:text-primary-light transition-colors group">
-            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
-            <span>Back to Explorer</span>
-          </Link>
+          <Flex align="center" justify="between" className="flex-wrap gap-4">
+            <Link href="/explore" className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-text hover:text-primary dark:hover:text-primary-light transition-colors group">
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+              <span>Back to Explorer</span>
+            </Link>
+
+            <Breadcrumb
+              items={[
+                { label: "Explore", href: "/explore" },
+                { label: roadmap.category, href: `/explore?category=${roadmap.category}` },
+                { label: roadmap.title }
+              ]}
+            />
+          </Flex>
         </Container>
       </div>
 
@@ -363,6 +375,143 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                       </Flex>
                     ))}
                   </div>
+                </div>
+
+              </div>
+
+              {/* ================= 1.5 Reviews & Ratings Section Card ================= */}
+              <div className="bg-white dark:bg-[#090d16] border border-border-color dark:border-slate-800/40 rounded-2xl p-6 md:p-8 shadow-xs flex flex-col gap-8">
+                
+                {/* Section Header */}
+                <h2 className="text-sm font-black text-dark-text uppercase tracking-widest flex items-center gap-1.5 border-b border-slate-50 dark:border-slate-850/40 pb-4">
+                  <Star className="h-4.5 w-4.5 text-amber-500 fill-current" />
+                  <span>Reviews & Ratings</span>
+                </h2>
+
+                {/* Rating Breakdown block */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-slate-50/50 dark:bg-slate-900/10 p-5 rounded-xl border border-border-color/40 dark:border-slate-850/40">
+                  
+                  {/* Score circle (Col 4) */}
+                  <div className="md:col-span-4 flex flex-col items-center justify-center text-center">
+                    <span className="text-4xl md:text-5xl font-black text-dark-text">{roadmap.rating.toFixed(1)}</span>
+                    <Flex className="text-amber-500 my-1.5">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star key={s} className="h-4.5 w-4.5 fill-current" />
+                      ))}
+                    </Flex>
+                    <span className="text-xxs font-bold text-secondary-text">
+                      Based on {roadmap.reviewsCount} ratings
+                    </span>
+                  </div>
+
+                  {/* Breakdown Bars (Col 8) */}
+                  <div className="md:col-span-8 flex flex-col gap-2.5">
+                    {[
+                      { stars: 5, pct: "78%" },
+                      { stars: 4, pct: "15%" },
+                      { stars: 3, pct: "5%" },
+                      { stars: 2, pct: "1%" },
+                      { stars: 1, pct: "1%" },
+                    ].map((row) => (
+                      <Flex key={row.stars} align="center" gap={3} className="text-xxs font-bold text-secondary-text">
+                        <span className="w-4 shrink-0 text-right">{row.stars}★</span>
+                        <div className="flex-1 h-2 rounded-full bg-slate-100 dark:bg-slate-850 overflow-hidden">
+                          <div className="h-full bg-amber-500" style={{ width: row.pct }} />
+                        </div>
+                        <span className="w-8 shrink-0 text-left">{row.pct}</span>
+                      </Flex>
+                    ))}
+                  </div>
+
+                </div>
+
+                {/* Individual reviews listing */}
+                <div className="flex flex-col gap-6">
+                  {isRelatedLoading ? (
+                    // Render reviews list loading skeletons
+                    [1, 2, 3].map((s) => (
+                      <div key={s} className="flex gap-4 animate-pulse pb-6 border-b border-slate-50 dark:border-slate-850/40 last:border-0 last:pb-0">
+                        <div className="h-9 w-9 rounded-full bg-slate-200 dark:bg-slate-800 shrink-0" />
+                        <div className="flex flex-col gap-2.5 flex-1">
+                          <div className="h-3.5 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+                          <div className="h-3 w-16 bg-slate-200 dark:bg-slate-800 rounded" />
+                          <div className="flex flex-col gap-1.5 mt-1">
+                            <div className="h-3 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                            <div className="h-3 w-3/4 bg-slate-200 dark:bg-slate-800 rounded" />
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    // Render loaded reviews
+                    [
+                      {
+                        initials: "ER",
+                        color: "bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400",
+                        name: "Elena Rostova",
+                        rating: 5,
+                        date: "July 14, 2026",
+                        text: "Exceptional curriculum structure. I constructed my entire development portfolio off this exact study timeline. The references match standard industry environments.",
+                      },
+                      {
+                        initials: "SJ",
+                        color: "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400",
+                        name: "Sarah Jenkins",
+                        rating: 5,
+                        date: "July 12, 2026",
+                        text: "The progression from basic JavaScript DOM structures to dynamic React states was incredibly clear. Perfect for transitioners looking to avoid generic visual tutorials.",
+                      },
+                      {
+                        initials: "DC",
+                        color: "bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400",
+                        name: "David Chen",
+                        rating: 4,
+                        date: "July 08, 2026",
+                        text: "Highly recommended for self-paced learners. The outcomes checklists let me track my learning velocity and focus targets. Prepared me well for backend testing.",
+                      },
+                      {
+                        initials: "MV",
+                        color: "bg-purple-50 text-purple-600 dark:bg-purple-950/20 dark:text-purple-400",
+                        name: "Marcus Vance",
+                        rating: 5,
+                        date: "July 01, 2026",
+                        text: "Super clean layout configurations. It includes Git and bundle optimization details which bootcamps usually skip. Very pleased with the learning curve.",
+                      },
+                    ].map((review, idx) => (
+                      <div
+                        key={idx}
+                        className="flex gap-4 pb-6 border-b border-slate-50 dark:border-slate-850/40 last:border-0 last:pb-0"
+                      >
+                        {/* Avatar initials */}
+                        <div className={`h-9 w-9 rounded-full ${review.color} flex items-center justify-center text-xs font-bold shrink-0 shadow-xxs`}>
+                          {review.initials}
+                        </div>
+
+                        {/* Details */}
+                        <div className="flex flex-col gap-1 flex-1">
+                          <Flex justify="between" align="center" className="flex-wrap gap-1">
+                            <span className="text-xs font-black text-dark-text">{review.name}</span>
+                            <span className="text-[10px] text-secondary-text font-bold">{review.date}</span>
+                          </Flex>
+                          
+                          {/* Stars */}
+                          <Flex className="text-amber-500 my-0.5">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                              <Star
+                                key={s}
+                                className={cn("h-3 w-3", s <= review.rating ? "fill-current" : "opacity-20")}
+                              />
+                            ))}
+                          </Flex>
+
+                          {/* Review comment */}
+                          <p className="text-xxs text-secondary-text leading-relaxed mt-1">
+                            {review.text}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
 
               </div>
