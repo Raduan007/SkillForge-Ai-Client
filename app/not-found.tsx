@@ -14,7 +14,7 @@ export default function NotFound() {
       <Container className="max-w-md">
         <Flex direction="col" align="center" justify="center" gap={6} className="text-center p-6 bg-white border border-border-color rounded-xl shadow-md">
           {/* Icon */}
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-primary animate-pulse">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-50 text-primary animate-pulse">
             <FileQuestion className="h-8 w-8" />
           </div>
 

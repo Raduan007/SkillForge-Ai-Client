@@ -66,7 +66,7 @@ export default function FeaturedCareers() {
   const getDifficultyStyles = (level: CareerPath["difficulty"]) => {
     switch (level) {
       case "Beginner":
-        return "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30";
+        return "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900/30";
       case "Intermediate":
         return "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30";
       case "Advanced":

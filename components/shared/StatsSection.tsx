@@ -66,7 +66,7 @@ export default function StatsSection() {
       suffix: "+",
       icon: Users,
       colorClass: "text-primary",
-      bgClass: "bg-blue-50 dark:bg-blue-950/20 border-blue-100/40 dark:border-blue-900/10",
+      bgClass: "bg-indigo-50 dark:bg-indigo-950/20 border-indigo-100/40 dark:border-indigo-900/10",
     },
     {
       id: "roadmaps",
@@ -75,7 +75,7 @@ export default function StatsSection() {
       suffix: "+",
       icon: Map,
       colorClass: "text-secondary",
-      bgClass: "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-100/40 dark:border-emerald-900/10",
+      bgClass: "bg-amber-50 dark:bg-amber-950/20 border-amber-100/40 dark:border-amber-900/10",
     },
     {
       id: "ai-gens",
@@ -94,7 +94,7 @@ export default function StatsSection() {
       decimals: 1,
       icon: TrendingUp,
       colorClass: "text-primary",
-      bgClass: "bg-blue-50 dark:bg-blue-950/20 border-blue-100/40 dark:border-blue-900/10",
+      bgClass: "bg-indigo-50 dark:bg-indigo-950/20 border-indigo-100/40 dark:border-indigo-900/10",
     },
     {
       id: "community",
@@ -103,7 +103,7 @@ export default function StatsSection() {
       suffix: "+",
       icon: Globe,
       colorClass: "text-secondary",
-      bgClass: "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-100/40 dark:border-emerald-900/10",
+      bgClass: "bg-amber-50 dark:bg-amber-950/20 border-amber-100/40 dark:border-amber-900/10",
     },
   ];
 

@@ -218,7 +218,7 @@ export default function Navbar() {
                     <div className="flex flex-col border-b border-border-color dark:border-slate-800 pb-3">
                       <span className="text-sm font-bold text-dark-text leading-snug">{mockProfile.name}</span>
                       <span className="text-xxs text-secondary-text truncate">{mockProfile.email}</span>
-                      <span className="inline-flex mt-1.5 w-fit rounded-full bg-blue-50 dark:bg-blue-950/40 px-2.5 py-0.5 text-xxs font-bold text-primary dark:text-primary-light border border-primary/10">
+                      <span className="inline-flex mt-1.5 w-fit rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-0.5 text-xxs font-bold text-primary dark:text-primary-light border border-primary/10">
                         {mockProfile.level} User
                       </span>
                     </div>
@@ -331,7 +331,7 @@ export default function Navbar() {
                         className={cn(
                           "flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all",
                           isActive
-                            ? "text-primary dark:text-primary-light bg-blue-50/30 dark:bg-blue-950/20 font-bold"
+                            ? "text-primary dark:text-primary-light bg-indigo-50/30 dark:bg-indigo-950/20 font-bold"
                             : "text-secondary-text hover:text-dark-text hover:bg-slate-50 dark:hover:bg-slate-850/20"
                         )}
                       >

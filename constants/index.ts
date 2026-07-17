@@ -64,8 +64,8 @@ export const THEME_CONSTANTS = {
 // 6. CORE DESIGN SYSTEM COLORS (HEX VALUES)
 // ==========================================
 export const COLOR_CONSTANTS = {
-  PRIMARY: "#2563EB", // Royal Blue
-  SECONDARY: "#10B981", // Emerald Green
+  PRIMARY: "#4F46E5", // Deep Indigo
+  SECONDARY: "#F59E0B", // Amber Gold
   BACKGROUND_LIGHT: "#F8FAFC",
   BACKGROUND_DARK: "#090D16",
   TEXT_DARK: "#0F172A",
@@ -77,9 +77,9 @@ export const COLOR_CONSTANTS = {
 // 7. CHART VISUAL PALETTES (HEX VALUES)
 // ==========================================
 export const CHART_COLORS = {
-  PRIMARY: "#2563EB", // Royal Blue (Progress tracks)
-  SECONDARY: "#10B981", // Emerald Green (Success spikes)
-  WARNING: "#F59E0B", // Amber Yellow (Streaks)
+  PRIMARY: "#4F46E5", // Deep Indigo (Progress tracks)
+  SECONDARY: "#F59E0B", // Amber Gold (Success spikes)
+  WARNING: "#F43F5E", // Rose (Warnings)
   ERROR: "#EF4444", // Red warning (Fails)
   INFO: "#0EA5E9", // Sky Blue (Reference items)
   GRID_BORDER: "#E2E8F0", // Grid delimiter borders

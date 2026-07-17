@@ -129,7 +129,7 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
             },
             success: {
               iconTheme: {
-                primary: "#10B981",
+                primary: "#F59E0B",
                 secondary: "#FFFFFF",
               },
             },

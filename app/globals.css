@@ -2,13 +2,13 @@
 
 @theme {
   /* --- COLOR PALETTE --- */
-  --color-primary: #2563EB;
-  --color-primary-light: #60A5FA;
-  --color-primary-dark: #1D4ED8;
+  --color-primary: #4F46E5;
+  --color-primary-light: #818CF8;
+  --color-primary-dark: #4338CA;
   
-  --color-secondary: #10B981;
-  --color-secondary-light: #34D399;
-  --color-secondary-dark: #047857;
+  --color-secondary: #F59E0B;
+  --color-secondary-light: #FBBF24;
+  --color-secondary-dark: #D97706;
   
   --color-neutral-bg: #F8FAFC;
   --color-dark-text: #0F172A;
@@ -111,7 +111,7 @@ body {
 
 /* --- SELECTION COLOR --- */
 ::selection {
-  background-color: #2563EB;
+  background-color: #4F46E5;
   color: #FFFFFF;
 }
 
@@ -133,7 +133,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2563EB;
+  background: #4F46E5;
 }
 
 /* --- REUSABLE UTILITY CLASSES --- */

@@ -122,7 +122,7 @@ const Card: React.FC<CardProps> = ({
       {/* Card Icon Header */}
       {Icon && !imageSrc && (
         <div className="pt-5 px-5 shrink-0 select-none">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/25 text-primary">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/25 text-primary">
             <Icon className="h-5 w-5" />
           </div>
         </div>

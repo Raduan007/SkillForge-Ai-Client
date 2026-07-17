@@ -54,7 +54,7 @@ export default function AIFeaturesSection() {
         {/* ================= Header Title ================= */}
         <Flex direction="col" align="center" className="text-center mb-12 gap-3">
           {/* Animated decorative spark */}
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-950/20 text-primary mb-1 animate-pulse">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-primary mb-1 animate-pulse">
             <Sparkles className="h-5 w-5" />
           </div>
           

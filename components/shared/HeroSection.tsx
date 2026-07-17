@@ -28,7 +28,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              className="inline-flex w-fit items-center gap-1.5 rounded-full bg-blue-50 dark:bg-blue-950/30 px-3 py-1 text-xxs font-bold text-primary dark:text-primary-light border border-primary/10 shadow-xxs"
+              className="inline-flex w-fit items-center gap-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/30 px-3 py-1 text-xxs font-bold text-primary dark:text-primary-light border border-primary/10 shadow-xxs"
             >
               <Sparkles className="h-3.5 w-3.5 fill-primary/10" />
               <span>Next-Gen AI Career Planning</span>
@@ -123,7 +123,7 @@ export default function HeroSection() {
                 
                 {/* Node 1: Completed */}
                 <Flex align="center" gap={3} className="relative z-10">
-                  <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/20 flex items-center justify-center text-secondary shrink-0">
+                  <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/20 flex items-center justify-center text-emerald-600 shrink-0">
                     <CheckCircle2 className="h-4.5 w-4.5" />
                   </div>
                   <div className="flex flex-col">
@@ -135,9 +135,9 @@ export default function HeroSection() {
                 {/* Node 2: Active */}
                 <Flex align="center" gap={3} className="relative z-10">
                   <motion.div
-                    animate={{ scale: [1, 1.05, 1], borderColor: ["#2563EB", "#10B981", "#2563EB"] }}
+                    animate={{ scale: [1, 1.05, 1], borderColor: ["#4F46E5", "#F59E0B", "#4F46E5"] }}
                     transition={{ repeat: Infinity, duration: 4 }}
-                    className="h-8.5 w-8.5 rounded-full bg-blue-50 dark:bg-blue-950/20 border border-primary flex items-center justify-center text-primary shrink-0"
+                    className="h-8.5 w-8.5 rounded-full bg-indigo-50 dark:bg-indigo-950/20 border border-primary flex items-center justify-center text-primary shrink-0"
                   >
                     <Play className="h-3.5 w-3.5 fill-current ml-0.5 animate-pulse" />
                   </motion.div>

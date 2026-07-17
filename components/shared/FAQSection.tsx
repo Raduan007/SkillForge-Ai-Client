@@ -48,7 +48,7 @@ export default function FAQSection() {
         
         {/* ================= Header Title ================= */}
         <Flex direction="col" align="center" className="text-center mb-10 gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-950/20 text-primary mb-1 animate-pulse">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-primary mb-1 animate-pulse">
             <HelpCircle className="h-5 w-5" />
           </div>
           <h2 className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight">
@@ -78,7 +78,7 @@ export default function FAQSection() {
           transition={{ duration: 0.3, delay: 0.1 }}
           className="p-6 rounded-2xl border border-border-color dark:border-slate-800/40 bg-slate-50/50 dark:bg-slate-850/10 text-center flex flex-col items-center gap-3.5"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-950/30 text-primary">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/30 text-primary">
             <Mail className="h-4.5 w-4.5" />
           </div>
           <div className="flex flex-col gap-1">

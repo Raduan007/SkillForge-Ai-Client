@@ -49,7 +49,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
   const getDifficultyColor = (level: "Beginner" | "Intermediate" | "Advanced") => {
     switch (level) {
       case "Beginner":
-        return "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30";
+        return "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900/30";
       case "Intermediate":
         return "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30";
       case "Advanced":
@@ -122,7 +122,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                 
                 {/* Path Category badge */}
                 <Flex align="center" gap={2}>
-                  <span className="text-[10px] font-bold text-primary dark:text-primary-light bg-blue-50 dark:bg-blue-950/20 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+                  <span className="text-[10px] font-bold text-primary dark:text-primary-light bg-indigo-50 dark:bg-indigo-950/20 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
                     {roadmap.category}
                   </span>
                   <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700" />
@@ -196,7 +196,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                   <div className="flex flex-col gap-3">
                     {roadmap.learningOutcomes?.map((outcome, idx) => (
                       <Flex key={idx} align="start" gap={2}>
-                        <CheckCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
+                        <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                         <span className="text-xs text-secondary-text leading-normal">{outcome}</span>
                       </Flex>
                     ))}
@@ -273,7 +273,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                     [
                       {
                         initials: "ER",
-                        color: "bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400",
+                        color: "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/20 dark:text-indigo-400",
                         name: "Elena Rostova",
                         rating: 5,
                         date: "July 14, 2026",
@@ -361,7 +361,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                     <span className="text-[10px] text-secondary-text font-bold uppercase tracking-wider">{roadmap.category} Badge</span>
                   </div>
 
-                  <div className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/30 px-2 py-0.5 text-[9px] font-bold text-secondary">
+                  <div className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/30 px-2 py-0.5 text-[9px] font-bold text-emerald-600">
                     <ShieldCheck className="h-3 w-3" />
                     <span>AI-Verified</span>
                   </div>

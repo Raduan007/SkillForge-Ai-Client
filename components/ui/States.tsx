@@ -109,7 +109,7 @@ export const PageLoader: React.FC<{ message?: string; className?: string }> = ({
         className
       )}
     >
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-primary mb-4 animate-bounce">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-50 text-primary mb-4 animate-bounce">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
       <h3 className="text-base font-bold text-dark-text">{message}</h3>
