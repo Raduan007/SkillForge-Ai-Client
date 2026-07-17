@@ -1,6 +1,8 @@
 import FeaturedCareers from "@/components/shared/FeaturedCareers";
 import FeaturesSection from "@/components/shared/FeaturesSection";
 import StatsSection from "@/components/shared/StatsSection";
+import AIFeaturesSection from "@/components/shared/AIFeaturesSection";
+import TestimonialsSection from "@/components/shared/TestimonialsSection";
 import { Container, PageWrapper } from "@/components/layout/Layouts";
 import { Compass } from "lucide-react";
 
@@ -30,6 +32,12 @@ export default function Home() {
 
       {/* Platform Metrics Statistics Section */}
       <StatsSection />
+
+      {/* AI Features Highlight Section */}
+      <AIFeaturesSection />
+
+      {/* Success Stories Testimonials Section */}
+      <TestimonialsSection />
     </PageWrapper>
   );
 }
