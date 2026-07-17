@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { Star, Clock, BarChart, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Container, Section, Grid, Flex } from "@/components/layout/Layouts";
@@ -139,13 +140,15 @@ export default function FeaturedCareers() {
                 >
                   {/* Card Cover Image */}
                   <div className="relative h-44 w-full bg-slate-100 dark:bg-slate-900 overflow-hidden shrink-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={career.imageSrc}
                       alt={career.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-103"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-103"
+                      priority={idx === 0}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
                   </div>
 
                   {/* Card Body */}

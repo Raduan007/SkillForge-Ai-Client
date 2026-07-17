@@ -13,6 +13,19 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "SkillForge AI - AI-Powered Career & Learning Roadmaps",
   description: "Accelerate your career with customized, AI-generated learning roadmaps, interactive skill assessments, and personal AI career co-pilots.",
+  openGraph: {
+    title: "SkillForge AI - AI-Powered Career & Learning Roadmaps",
+    description: "Accelerate your career with customized, AI-generated learning roadmaps, interactive skill assessments, and personal AI career co-pilots.",
+    url: "https://skillforge.ai",
+    siteName: "SkillForge AI",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SkillForge AI - AI-Powered Career & Learning Roadmaps",
+    description: "Accelerate your career with customized, AI-generated learning roadmaps, interactive skill assessments, and personal AI career co-pilots.",
+  },
 };
 
 export default function RootLayout({
