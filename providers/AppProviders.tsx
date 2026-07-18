@@ -119,7 +119,7 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
         </AuthProvider>
         {/* Toast notifications configuration matching theme color palettes */}
         <Toaster
-          position="top-right"
+          position="bottom-right"
           toastOptions={{
             duration: 4000,
             style: {

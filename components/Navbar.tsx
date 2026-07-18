@@ -64,7 +64,6 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
     { label: "About", href: "/about" },
-    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -272,14 +271,20 @@ export default function Navbar() {
             </div>
           ) : (
             /* Logged Out CTA Widget */
-            <div className="hidden md:flex items-center gap-2">
-              <Link href="/login">
+            <div className="hidden md:flex items-center gap-4">
+              <Link
+                href="/login"
+                className="text-sm font-semibold text-secondary-text hover:text-dark-text transition-colors"
+              >
+                Login
+              </Link>
+              <Link href="/register">
                 <Button
                   variant="primary"
                   size="medium"
                   className="text-xs font-bold px-5"
                 >
-                  Sign In
+                  Register
                 </Button>
               </Link>
             </div>
@@ -401,14 +406,23 @@ export default function Navbar() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-2">
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                  <div className="flex flex-col gap-2.5">
+                    <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button
                         variant="primary"
                         size="large"
                         className="w-full text-xs font-bold"
                       >
-                        Sign In
+                        Register
+                      </Button>
+                    </Link>
+                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button
+                        variant="outline"
+                        size="large"
+                        className="w-full text-xs font-bold bg-white dark:bg-transparent"
+                      >
+                        Login
                       </Button>
                     </Link>
                   </div>

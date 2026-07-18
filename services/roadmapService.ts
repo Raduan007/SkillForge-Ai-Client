@@ -63,4 +63,12 @@ export class ClientRoadmapService {
     const response = await apiClient.get<Roadmap>(`/roadmaps/${slug}`);
     return response.data;
   }
+
+  /**
+   * Fetch single roadmap by its ID from MongoDB.
+   */
+  static async getRoadmapById(id: string): Promise<Roadmap> {
+    const response = await apiClient.get<Roadmap>(`/roadmaps/${id}`);
+    return response.data;
+  }
 }

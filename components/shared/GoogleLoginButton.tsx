@@ -59,20 +59,30 @@ export const GoogleLoginButton: React.FC = () => {
       return;
     }
 
+    const scriptSrc = "https://accounts.google.com/gsi/client";
+    const existingScript = document.querySelector(`script[src="${scriptSrc}"]`);
+
+    if (existingScript) {
+      const handleLoad = () => setScriptLoaded(true);
+      existingScript.addEventListener("load", handleLoad);
+      if (window.google?.accounts?.id) {
+        setScriptLoaded(true);
+      }
+      return () => {
+        existingScript.removeEventListener("load", handleLoad);
+      };
+    }
+
     const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
+    script.src = scriptSrc;
     script.async = true;
     script.defer = true;
     script.onload = () => setScriptLoaded(true);
     script.onerror = () => {
       console.error("Failed to load Google Identity Services SDK.");
-      toast.error("Failed to load Google Sign-In script. Check your connection.");
+      toast.error("Failed to load Google Sign-In script. Check your connection.", { duration: 3000 });
     };
     document.body.appendChild(script);
-
-    return () => {
-      // Keep script loaded to avoid multiple script tag injections
-    };
   }, []);
 
   // Initialize and Render Button when script is ready
@@ -103,7 +113,7 @@ export const GoogleLoginButton: React.FC = () => {
         const result = apiResponse.data;
 
         if (result.success && result.data) {
-          toast.success(result.message || "Welcome back!", { id: loadingToastId });
+          toast.success(result.message || "Welcome back!", { id: loadingToastId, duration: 2000 });
           
           // Log user in
           login(result.data.accessToken, result.data.user);
@@ -112,7 +122,7 @@ export const GoogleLoginButton: React.FC = () => {
           const redirectTo = searchParams.get("redirect") || "/";
           router.push(redirectTo);
         } else {
-          toast.error("Google authentication failed. Server returned error.", { id: loadingToastId });
+          toast.error("Google authentication failed. Server returned error.", { id: loadingToastId, duration: 3000 });
         }
       } catch (err: unknown) {
         console.error("Google API Callback Error:", err);
@@ -123,7 +133,7 @@ export const GoogleLoginButton: React.FC = () => {
             errorMsg = axiosError.response.data.error;
           }
         }
-        toast.error(errorMsg, { id: loadingToastId });
+        toast.error(errorMsg, { id: loadingToastId, duration: 3000 });
       } finally {
         setIsAuthenticating(false);
       }

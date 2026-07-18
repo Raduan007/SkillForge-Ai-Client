@@ -209,7 +209,7 @@ export default function ManageItemsPage() {
                       {/* Actions */}
                       <td className="py-4 px-6">
                         <div className="flex justify-center items-center gap-3">
-                          <Link href={`/explore/${item.slug}`}>
+                          <Link href={`/items/manage/${item._id}`}>
                             <button
                               type="button"
                               className="p-1.5 rounded-lg border border-border-color dark:border-slate-800 text-secondary-text hover:text-dark-text hover:bg-slate-100 dark:hover:bg-slate-800/40 transition-all"
@@ -291,7 +291,7 @@ export default function ManageItemsPage() {
 
                   {/* Bottom card segment (Actions) */}
                   <div className="flex gap-3">
-                    <Link href={`/explore/${item.slug}`} className="flex-1">
+                    <Link href={`/items/manage/${item._id}`} className="flex-1">
                       <Button variant="outline" size="medium" className="w-full text-xs font-semibold gap-1.5">
                         <Eye className="h-4 w-4" />
                         View Page

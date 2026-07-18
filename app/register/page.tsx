@@ -15,7 +15,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, user } = useAuth();
-  
+
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -43,7 +43,7 @@ export default function RegisterPage() {
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Please enter a valid email address";
     }
-    
+
     if (!password) {
       newErrors.password = "Password is required";
     } else {
@@ -85,13 +85,13 @@ export default function RegisterPage() {
       const result = response.data;
 
       if (result.success && result.data) {
-        toast.success(result.message || "Account created successfully!", { id: loadingToastId });
+        toast.success(result.message || "Account created successfully!", { id: loadingToastId, duration: 2000 });
         login(result.data.accessToken, result.data.user);
-        
+
         const redirectTo = searchParams.get("redirect") || "/";
         router.push(redirectTo);
       } else {
-        toast.error("Registration failed.", { id: loadingToastId });
+        toast.error("Registration failed.", { id: loadingToastId, duration: 3000 });
       }
     } catch (err: unknown) {
       console.error("[Register] Error:", err);
@@ -102,7 +102,7 @@ export default function RegisterPage() {
           errorMsg = axiosError.response.data.error;
         }
       }
-      toast.error(errorMsg, { id: loadingToastId });
+      toast.error(errorMsg, { id: loadingToastId, duration: 3000 });
     } finally {
       setIsLoading(false);
     }
@@ -119,12 +119,8 @@ export default function RegisterPage() {
         <h2 className="text-center text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
           Create free account
         </h2>
-        <p className="mt-2 text-center text-sm text-secondary-text">
-          Or{" "}
-          <Link href="/login" className="font-bold text-primary hover:text-primary-dark transition-colors">
-            sign in to your existing account
-          </Link>
-        </p>
+
+
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -175,6 +171,13 @@ export default function RegisterPage() {
               </Button>
             </div>
           </form>
+
+          <div className="mt-4 text-center text-sm text-secondary-text">
+            Already have an account?{" "}
+            <Link href="/login" className="font-bold text-primary hover:text-primary-dark transition-colors">
+              Login
+            </Link>
+          </div>
 
           <div className="mt-6">
             <div className="relative">

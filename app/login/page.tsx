@@ -15,7 +15,7 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, user } = useAuth();
-  
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [errors, setErrors] = React.useState<{ email?: string; password?: string }>({});
@@ -36,7 +36,7 @@ export default function LoginPage() {
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Please enter a valid email address";
     }
-    
+
     if (!password) {
       newErrors.password = "Password is required";
     }
@@ -65,13 +65,13 @@ export default function LoginPage() {
       const result = response.data;
 
       if (result.success && result.data) {
-        toast.success(result.message || "Logged in successfully!", { id: loadingToastId });
+        toast.success(result.message || "Logged in successfully!", { id: loadingToastId, duration: 2000 });
         login(result.data.accessToken, result.data.user);
-        
+
         const redirectTo = searchParams.get("redirect") || "/";
         router.push(redirectTo);
       } else {
-        toast.error("Invalid credentials.", { id: loadingToastId });
+        toast.error("Invalid credentials.", { id: loadingToastId, duration: 3000 });
       }
     } catch (err: unknown) {
       console.error("[Login] Error:", err);
@@ -82,7 +82,7 @@ export default function LoginPage() {
           errorMsg = axiosError.response.data.error;
         }
       }
-      toast.error(errorMsg, { id: loadingToastId });
+      toast.error(errorMsg, { id: loadingToastId, duration: 3000 });
     } finally {
       setIsLoading(false);
     }
@@ -99,12 +99,7 @@ export default function LoginPage() {
         <h2 className="text-center text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
           Sign in to SkillForge AI
         </h2>
-        <p className="mt-2 text-center text-sm text-secondary-text">
-          Or{" "}
-          <Link href="/register" className="font-bold text-primary hover:text-primary-dark transition-colors">
-            create a new account for free
-          </Link>
-        </p>
+
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -155,6 +150,13 @@ export default function LoginPage() {
               </Button>
             </div>
           </form>
+
+          <div className="mt-4 text-center text-sm text-secondary-text">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="font-bold text-primary hover:text-primary-dark transition-colors">
+              Register
+            </Link>
+          </div>
 
           <div className="mt-6">
             <div className="relative">

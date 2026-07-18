@@ -24,3 +24,15 @@ export function useRoadmapBySlug(slug: string) {
     staleTime: 10000, // 10 seconds fresh status
   });
 }
+
+/**
+ * Hook to retrieve a single roadmap by its ID.
+ */
+export function useRoadmapById(id: string) {
+  return useQuery({
+    queryKey: ["roadmap-id", id],
+    queryFn: () => ClientRoadmapService.getRoadmapById(id),
+    enabled: !!id,
+    staleTime: 10000, // 10 seconds fresh status
+  });
+}
