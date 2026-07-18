@@ -133,7 +133,7 @@ export default function AICareerChatPage() {
   const [inputMessage, setInputMessage] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   
-  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+  const chatContainerRef = React.useRef<HTMLDivElement>(null);
 
   // Protection Check
   React.useEffect(() => {
@@ -143,9 +143,11 @@ export default function AICareerChatPage() {
     }
   }, [user, isAuthLoading, router]);
 
-  // Auto scroll to bottom
+  // Auto scroll inside chat container only (preventing body/footer scrolling)
   React.useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
   // TanStack Mutation for Chat POST
@@ -158,11 +160,11 @@ export default function AICareerChatPage() {
         content: msg.content
       }));
 
-      const response = await apiClient.post<ChatResponse>("/ai/chat", {
+      const response = await apiClient.post<{ success: boolean; data: ChatResponse }>("/ai/chat", {
         message: messageText,
         history: historyPayload
       });
-      return response.data;
+      return response.data.data;
     },
     onSuccess: (data) => {
       setMessages((prev) => [
@@ -243,7 +245,7 @@ export default function AICareerChatPage() {
 
       <Section className="py-8 md:py-12">
         <Container>
-          <div className="max-w-5xl mx-auto flex flex-col gap-6">
+          <div className="max-w-3xl mx-auto flex flex-col gap-6">
             
             {/* Page Header */}
             <div className="flex flex-col items-center text-center gap-2 max-w-2xl mx-auto mb-2">
@@ -261,10 +263,13 @@ export default function AICareerChatPage() {
             </div>
 
             {/* Main Chat Interface Console */}
-            <div className="bg-white dark:bg-[#0c1220] border border-border-color dark:border-slate-800/50 rounded-2xl overflow-hidden shadow-sm flex flex-col h-[600px]">
+            <div className="bg-white dark:bg-[#0c1220] border border-border-color dark:border-slate-800/50 rounded-2xl overflow-hidden shadow-sm flex flex-col h-[520px]">
               
               {/* Messages viewport panel */}
-              <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/40 dark:bg-[#090d16]/10">
+              <div
+                ref={chatContainerRef}
+                className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/40 dark:bg-[#090d16]/10"
+              >
                 {messages.length === 0 && (
                   <div className="h-full flex flex-col items-center justify-center text-center gap-4 py-12 select-none">
                     <div className="h-12 w-12 rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-primary flex items-center justify-center animate-bounce">
@@ -342,8 +347,6 @@ export default function AICareerChatPage() {
                     </div>
                   </div>
                 )}
-
-                <div ref={messagesEndRef} />
               </div>
 
               {/* Suggestions Panel */}

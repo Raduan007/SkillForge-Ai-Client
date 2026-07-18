@@ -15,7 +15,6 @@ import {
   Flame,
   Award,
   ChevronDown,
-  LayoutDashboard,
   Map,
   MessageSquare,
 } from "lucide-react";
@@ -36,13 +35,13 @@ export default function Navbar() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
-  
+
   // Scrolled state for sticky header transitions
   const [isScrolled, setIsScrolled] = useState(false);
-  
+
   // Mobile drawer state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   // Profile dropdown state
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -71,9 +70,8 @@ export default function Navbar() {
   const loggedInRoutes: NavRoute[] = [
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
-    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { label: "My Roadmaps", href: "/roadmaps", icon: Map },
-    { label: "AI Assistant", href: "/copilot", icon: MessageSquare },
+    { label: "AI Assistant", href: "/ai/chat", icon: MessageSquare },
   ];
 
   const currentRoutes = isLoggedIn ? loggedInRoutes : loggedOutRoutes;
@@ -124,7 +122,7 @@ export default function Navbar() {
       )}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        
+
         {/* ================= Logo Segment ================= */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary p-0.5 shadow-md shadow-primary/10 transition-transform group-hover:scale-[1.03]">
@@ -167,7 +165,7 @@ export default function Navbar() {
 
         {/* ================= Action Widgets Segment ================= */}
         <div className="flex items-center gap-3">
-          
+
           {/* Theme Toggle Button */}
           <button
             type="button"
@@ -182,7 +180,7 @@ export default function Navbar() {
           {isLoggedIn ? (
             /* Logged In Widget */
             <div className="relative flex items-center gap-2.5" ref={dropdownRef}>
-              
+
               {/* Streak Indicator (Desktop) */}
               <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-amber-500/25 bg-amber-550/10 px-3 py-1 text-xs font-bold text-amber-600 dark:text-amber-500">
                 <Flame className="h-4 w-4 fill-amber-500 text-amber-500 animate-pulse" />
@@ -328,7 +326,7 @@ export default function Navbar() {
               className="fixed left-0 right-0 top-[65px] bg-white dark:bg-[#090d16] border-b border-border-color dark:border-slate-800 shadow-xl overflow-hidden z-45 md:hidden flex flex-col"
             >
               <div className="px-4 py-5 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
-                
+
                 {/* Navigation Links */}
                 <div className="flex flex-col gap-1.5">
                   {currentRoutes.map((route) => {

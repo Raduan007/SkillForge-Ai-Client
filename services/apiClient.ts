@@ -25,9 +25,14 @@ apiClient.interceptors.request.use(
   (config) => {
     // Only execute on browser runtime
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("skillforge-auth-token");
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+      let token = localStorage.getItem("skillforge-auth-token");
+      if (token) {
+        if (token.startsWith('"') && token.endsWith('"')) {
+          token = token.slice(1, -1);
+        }
+        if (config.headers) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
       }
     }
     return config;

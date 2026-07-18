@@ -93,7 +93,7 @@ export default function AIRoadmapGeneratorPage() {
   // TanStack Mutation configuration
   const generateMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiClient.post<GeneratedRoadmap>("/ai/roadmap", {
+      const response = await apiClient.post<{ success: boolean; data: GeneratedRoadmap }>("/ai/roadmap", {
         careerGoal,
         currentExperience,
         existingSkills,
@@ -101,7 +101,7 @@ export default function AIRoadmapGeneratorPage() {
         preferredLearningStyle,
         targetCompletionTime
       });
-      return response.data;
+      return response.data.data;
     },
     onSuccess: (data) => {
       setRoadmapData(data);
