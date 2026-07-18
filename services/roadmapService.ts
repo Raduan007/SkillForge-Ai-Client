@@ -71,4 +71,12 @@ export class ClientRoadmapService {
     const response = await apiClient.get<Roadmap>(`/roadmaps/${id}`);
     return response.data;
   }
+
+  /**
+   * Fetch only featured roadmaps from MongoDB.
+   */
+  static async getFeaturedRoadmaps(): Promise<Roadmap[]> {
+    const response = await apiClient.get<{ success: boolean; data: Roadmap[] }>("/roadmaps/featured");
+    return response.data.data;
+  }
 }

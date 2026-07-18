@@ -36,3 +36,14 @@ export function useRoadmapById(id: string) {
     staleTime: 10000, // 10 seconds fresh status
   });
 }
+
+/**
+ * Hook to retrieve featured roadmaps from the server.
+ */
+export function useFeaturedRoadmaps() {
+  return useQuery({
+    queryKey: ["roadmaps-featured"],
+    queryFn: () => ClientRoadmapService.getFeaturedRoadmaps(),
+    staleTime: 10000, // 10 seconds fresh status
+  });
+}

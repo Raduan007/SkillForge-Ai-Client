@@ -40,6 +40,15 @@ const Card: React.FC<CardProps> = ({
   className,
   icon: Icon,
 }) => {
+  const getCleanImageUrl = (url?: string) => {
+    if (!url) return url;
+    if (url.includes("full-stack-dev")) return "/careers/full-stack-developer.png";
+    if (url.includes("data_scientist")) return "/careers/data-scientist.png";
+    if (url.includes("ui_ux_designer")) return "/careers/ui-ux-designer.png";
+    if (url.includes("cloud_architect")) return "/careers/cloud-architect.png";
+    return url;
+  };
+  const displayImageSrc = getCleanImageUrl(imageSrc);
   // 1. SKELETON STATE RENDERER
   if (isSkeleton) {
     return (
@@ -108,11 +117,11 @@ const Card: React.FC<CardProps> = ({
       )}
 
       {/* Card Cover Image */}
-      {imageSrc && (
+      {displayImageSrc && (
         <div className="relative h-44 w-full bg-slate-100 overflow-hidden shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={imageSrc}
+            src={displayImageSrc}
             alt={imageAlt}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -120,7 +129,7 @@ const Card: React.FC<CardProps> = ({
       )}
 
       {/* Card Icon Header */}
-      {Icon && !imageSrc && (
+      {Icon && !displayImageSrc && (
         <div className="pt-5 px-5 shrink-0 select-none">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/25 text-primary">
             <Icon className="h-5 w-5" />

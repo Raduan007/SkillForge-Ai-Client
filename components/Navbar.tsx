@@ -12,8 +12,6 @@ import {
   Moon,
   User,
   LogOut,
-  Flame,
-  Award,
   ChevronDown,
   Map,
   MessageSquare,
@@ -181,11 +179,7 @@ export default function Navbar() {
             /* Logged In Widget */
             <div className="relative flex items-center gap-2.5" ref={dropdownRef}>
 
-              {/* Streak Indicator (Desktop) */}
-              <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-amber-500/25 bg-amber-550/10 px-3 py-1 text-xs font-bold text-amber-600 dark:text-amber-500">
-                <Flame className="h-4 w-4 fill-amber-500 text-amber-500 animate-pulse" />
-                <span>{mockProfile.streak}d Streak</span>
-              </div>
+
 
               {/* Profile Selector Dropdown Trigger */}
               <button
@@ -218,25 +212,10 @@ export default function Navbar() {
                     <div className="flex flex-col border-b border-border-color dark:border-slate-800 pb-3">
                       <span className="text-sm font-bold text-dark-text leading-snug">{mockProfile.name}</span>
                       <span className="text-xxs text-secondary-text truncate">{mockProfile.email}</span>
-                      <span className="inline-flex mt-1.5 w-fit rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-0.5 text-xxs font-bold text-primary dark:text-primary-light border border-primary/10">
-                        {mockProfile.level} User
-                      </span>
+
                     </div>
 
-                    {/* Streak & Badges Metrics */}
-                    <div className="flex gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-850/30 border border-border-color/60 dark:border-slate-800/40 text-center">
-                      <div className="flex-1 flex flex-col items-center">
-                        <Flame className="h-4.5 w-4.5 text-amber-500 fill-amber-500 mb-0.5" />
-                        <span className="text-xs font-bold text-dark-text">{mockProfile.streak} Days</span>
-                        <span className="text-xxs text-secondary-text">Streak</span>
-                      </div>
-                      <div className="w-[1px] bg-border-color dark:bg-slate-800" />
-                      <div className="flex-1 flex flex-col items-center">
-                        <Award className="h-4.5 w-4.5 text-secondary mb-0.5" />
-                        <span className="text-xs font-bold text-dark-text">{mockProfile.badgesCount}</span>
-                        <span className="text-xxs text-secondary-text">Badges</span>
-                      </div>
-                    </div>
+
 
                     {/* Links & Logout */}
                     <div className="flex flex-col gap-1">
@@ -367,17 +346,7 @@ export default function Navbar() {
                       </div>
                     </div>
 
-                    {/* Streak & Badges metrics row */}
-                    <div className="grid grid-cols-2 gap-2 text-center">
-                      <div className="flex items-center justify-center gap-2 p-2 rounded-lg border border-amber-500/20 bg-amber-500/5">
-                        <Flame className="h-4.5 w-4.5 text-amber-500 fill-amber-500" />
-                        <span className="text-xs font-bold text-dark-text">{mockProfile.streak}d Streak</span>
-                      </div>
-                      <div className="flex items-center justify-center gap-2 p-2 rounded-lg border border-secondary/20 bg-secondary/5">
-                        <Award className="h-4.5 w-4.5 text-secondary" />
-                        <span className="text-xs font-bold text-dark-text">{mockProfile.badgesCount} Badges</span>
-                      </div>
-                    </div>
+
 
                     {/* Profile Settings & Logout */}
                     <div className="flex flex-col gap-1.5 mt-1">

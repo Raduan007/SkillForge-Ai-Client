@@ -10,6 +10,9 @@ import { Card } from "@/components/ui/Card";
 import { toast } from "react-hot-toast";
 import { cn } from "@/utils/cn";
 import { useRoadmapBySlug, useRoadmaps } from "@/hooks/useRoadmaps";
+import { useAuth } from "@/providers/AuthProvider";
+import { useMyEnrollments, useEnrollRoadmap } from "@/hooks/useEnrollments";
+import { useRouter } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -28,11 +31,45 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
     .filter((rm) => rm.slug !== roadmap?.slug)
     .slice(0, 4);
 
+  const { user } = useAuth();
+  const router = useRouter();
+  const { data: enrollments = [] } = useMyEnrollments(!!user);
+  const enrollMutation = useEnrollRoadmap();
+
+  const isEnrolled = roadmap
+    ? enrollments.some((e) => e.roadmapId?._id === roadmap._id || (typeof e.roadmapId === "string" && e.roadmapId === roadmap._id))
+    : false;
+
   const handleEnroll = () => {
     if (!roadmap) return;
-    toast.success(`Successfully enrolled in "${roadmap.title}"! Course assets have been loaded.`, {
-      icon: "🎉",
-      id: "enroll-toast",
+    if (!user) {
+      toast.error("Please sign in to enroll in a roadmap.");
+      router.push(`/login?redirect=/explore/${roadmap.slug}`);
+      return;
+    }
+
+    if (isEnrolled) {
+      router.push("/roadmaps");
+      return;
+    }
+
+    enrollMutation.mutate(roadmap._id, {
+      onSuccess: () => {
+        toast.success(`Successfully enrolled in "${roadmap.title}"!`, {
+          icon: "🎉",
+          id: "enroll-toast",
+        });
+      },
+      onError: (err: unknown) => {
+        let msg = "Enrollment failed. Please try again.";
+        if (err && typeof err === "object") {
+          const axiosError = err as { response?: { data?: { error?: string } } };
+          if (axiosError.response?.data?.error) {
+            msg = axiosError.response.data.error;
+          }
+        }
+        toast.error(msg);
+      }
     });
   };
 
@@ -393,9 +430,10 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                     variant="primary"
                     size="large"
                     onClick={handleEnroll}
+                    disabled={enrollMutation.isPending}
                     className="w-full text-xs font-black shadow-md shadow-primary/10 py-3"
                   >
-                    Enroll in Pathway
+                    {enrollMutation.isPending ? "Enrolling..." : isEnrolled ? "Continue Learning" : "Enroll in Pathway"}
                   </Button>
                   <Button
                     variant="outline"
