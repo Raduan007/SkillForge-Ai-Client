@@ -20,6 +20,8 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { useTheme } from "@/providers/AppProviders";
+import { useAuth } from "@/providers/AuthProvider";
+import { toast } from "react-hot-toast";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/Button";
 
@@ -33,6 +35,7 @@ interface NavRoute {
 export default function Navbar() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   
   // Scrolled state for sticky header transitions
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,13 +47,13 @@ export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Mock Authentication State (for visual review and interactive testing)
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Authentication State dynamically resolved
+  const isLoggedIn = !!user;
 
-  // Simple mock profile details
+  // Simple profile details mapped to user session with fallbacks
   const mockProfile = {
-    name: "Developer Pathfinder",
-    email: "pathfinder@skillforge.ai",
+    name: user?.name || "Developer Pathfinder",
+    email: user?.email || "pathfinder@skillforge.ai",
     level: "Beginner",
     streak: 3,
     badgesCount: 2,
@@ -253,7 +256,8 @@ export default function Navbar() {
                         type="button"
                         onClick={() => {
                           setIsProfileOpen(false);
-                          setIsLoggedIn(false);
+                          logout();
+                          toast.success("Successfully logged out.");
                         }}
                         className="flex items-center gap-2 px-2.5 py-2 text-xs font-bold rounded-lg text-red-650 hover:text-red-700 hover:bg-red-50/30 transition-all w-full text-left"
                         role="menuitem"
@@ -269,14 +273,15 @@ export default function Navbar() {
           ) : (
             /* Logged Out CTA Widget */
             <div className="hidden md:flex items-center gap-2">
-              <Button
-                variant="primary"
-                size="medium"
-                onClick={() => setIsLoggedIn(true)}
-                className="text-xs font-bold px-5"
-              >
-                Sign In
-              </Button>
+              <Link href="/login">
+                <Button
+                  variant="primary"
+                  size="medium"
+                  className="text-xs font-bold px-5"
+                >
+                  Sign In
+                </Button>
+              </Link>
             </div>
           )}
 
@@ -385,7 +390,8 @@ export default function Navbar() {
                         type="button"
                         onClick={() => {
                           setIsMobileMenuOpen(false);
-                          setIsLoggedIn(false);
+                          logout();
+                          toast.success("Successfully logged out.");
                         }}
                         className="flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-red-650 hover:text-red-700 text-left w-full"
                       >
@@ -396,17 +402,15 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <div className="flex flex-col gap-2">
-                    <Button
-                      variant="primary"
-                      size="large"
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        setIsLoggedIn(true);
-                      }}
-                      className="w-full text-xs font-bold"
-                    >
-                      Sign In
-                    </Button>
+                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button
+                        variant="primary"
+                        size="large"
+                        className="w-full text-xs font-bold"
+                      >
+                        Sign In
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
