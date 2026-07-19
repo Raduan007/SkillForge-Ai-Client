@@ -12,9 +12,12 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRoadmaps } from "@/hooks/useRoadmaps";
+import { useAuth } from "@/providers/AuthProvider";
+import { useMyEnrollments } from "@/hooks/useEnrollments";
 
 export default function ExplorePage() {
   const router = useRouter();
+  const { user } = useAuth();
 
   // API State tracking
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -36,6 +39,9 @@ export default function ExplorePage() {
     category: categoryParam || undefined,
     sort: sortVal,
   });
+
+  // Fetch enrollments if user is authenticated to check status dynamically
+  const { data: enrollments = [] } = useMyEnrollments(!!user);
 
   // Derived state options
   const roadmaps = data?.roadmaps || [];
@@ -141,20 +147,29 @@ export default function ExplorePage() {
                   ))
                 ) : (
                   // Render loaded MongoDB roadmaps
-                  roadmaps.map((roadmap) => (
-                    <Link href={`/explore/${roadmap.slug}`} key={roadmap._id} className="flex flex-col h-full w-full">
-                      <Card
-                        isSkeleton={false}
-                        imageSrc={roadmap.coverImage}
-                        imageAlt={roadmap.title}
-                        title={roadmap.title}
-                        description={roadmap.shortDescription}
-                        metadata={[roadmap.difficulty, roadmap.duration, `★ ${roadmap.rating.toFixed(1)}`, roadmap.category]}
-                        actionLabel="View Details"
-                        className="h-full cursor-pointer border-border-color/60 dark:border-slate-800/40"
-                      />
-                    </Link>
-                  ))
+                  roadmaps.map((roadmap) => {
+                    const isEnrolled = enrollments.some(
+                      (e) => e.roadmapId?._id === roadmap._id || (typeof e.roadmapId === "string" && e.roadmapId === roadmap._id)
+                    );
+                    const cardMetadata = [roadmap.difficulty, roadmap.duration, `★ ${roadmap.rating.toFixed(1)}`, roadmap.category];
+                    if (isEnrolled) {
+                      cardMetadata.push("✓ Enrolled");
+                    }
+                    return (
+                      <Link href={`/explore/${roadmap.slug}`} key={roadmap._id} className="flex flex-col h-full w-full">
+                        <Card
+                          isSkeleton={false}
+                          imageSrc={roadmap.coverImage}
+                          imageAlt={roadmap.title}
+                          title={roadmap.title}
+                          description={roadmap.shortDescription}
+                          metadata={cardMetadata}
+                          actionLabel="View Details"
+                          className="h-full cursor-pointer border-border-color/60 dark:border-slate-800/40"
+                        />
+                      </Link>
+                    );
+                  })
                 )}
               </div>
             )}

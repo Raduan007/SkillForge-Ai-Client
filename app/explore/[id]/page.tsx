@@ -562,20 +562,29 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
 
           {/* Cards Grid */}
           <Grid cols={1} colsSm={2} colsLg={4} gap={5}>
-            {relatedRoadmaps.map((rm) => (
-              <Link href={`/explore/${rm.slug}`} key={rm._id} className="flex flex-col h-full w-full">
-                <Card
-                  isSkeleton={isRelatedLoading}
-                  imageSrc={rm.coverImage}
-                  imageAlt={rm.title}
-                  title={rm.title}
-                  description=""
-                  metadata={[rm.difficulty, rm.duration, `★ ${rm.rating.toFixed(1)}`, rm.category]}
-                  actionLabel="View Details"
-                  className="h-full cursor-pointer border-border-color/60 dark:border-slate-800/40"
-                />
-              </Link>
-            ))}
+            {relatedRoadmaps.map((rm) => {
+              const isRmEnrolled = enrollments.some(
+                (e) => e.roadmapId?._id === rm._id || (typeof e.roadmapId === "string" && e.roadmapId === rm._id)
+              );
+              const cardMetadata = [rm.difficulty, rm.duration, `★ ${rm.rating.toFixed(1)}`, rm.category];
+              if (isRmEnrolled) {
+                cardMetadata.push("✓ Enrolled");
+              }
+              return (
+                <Link href={`/explore/${rm.slug}`} key={rm._id} className="flex flex-col h-full w-full">
+                  <Card
+                    isSkeleton={isRelatedLoading}
+                    imageSrc={rm.coverImage}
+                    imageAlt={rm.title}
+                    title={rm.title}
+                    description=""
+                    metadata={cardMetadata}
+                    actionLabel="View Details"
+                    className="h-full cursor-pointer border-border-color/60 dark:border-slate-800/40"
+                  />
+                </Link>
+              );
+            })}
           </Grid>
 
         </Container>

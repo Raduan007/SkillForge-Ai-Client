@@ -142,14 +142,22 @@ const Card: React.FC<CardProps> = ({
         {/* Metadata Badges */}
         {metadata.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
-            {metadata.map((item, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xxs font-semibold text-secondary-text border border-slate-200"
-              >
-                {item}
-              </span>
-            ))}
+            {metadata.map((item, index) => {
+              const isEnrolledBadge = item === "✓ Enrolled";
+              return (
+                <span
+                  key={index}
+                  className={cn(
+                    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xxs font-semibold border",
+                    isEnrolledBadge
+                      ? "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-950/30"
+                      : "bg-slate-100 text-secondary-text border-slate-200"
+                  )}
+                >
+                  {item}
+                </span>
+              );
+            })}
           </div>
         )}
 

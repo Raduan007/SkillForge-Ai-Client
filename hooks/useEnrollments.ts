@@ -9,7 +9,8 @@ export function useMyEnrollments(enabled: boolean = true) {
     queryKey: ["my-enrollments"],
     queryFn: () => ClientEnrollmentService.getMyEnrollments(),
     enabled,
-    staleTime: 5000 // 5 seconds fresh status
+    staleTime: 30000, // 30 seconds cache fresh status
+    refetchOnWindowFocus: false,
   });
 }
 
