@@ -1,7 +1,21 @@
 import axios from "axios";
 import { handleApiError } from "./errorHandler";
 
-let rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+// Read Next.js env configuration
+let rawApiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+if (!rawApiUrl) {
+  if (typeof window !== "undefined") {
+    const hostname = window.location.hostname;
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      rawApiUrl = "http://localhost:5000/api";
+    } else {
+      rawApiUrl = "https://skill-forge-ai-server-kappa.vercel.app/api";
+    }
+  } else {
+    rawApiUrl = "https://skill-forge-ai-server-kappa.vercel.app/api";
+  }
+}
 
 // Defensive parsing to prevent relative URL and missing protocol/path suffix issues:
 if (rawApiUrl) {
@@ -22,6 +36,8 @@ if (rawApiUrl) {
 }
 
 const BASE_API_URL = rawApiUrl;
+
+console.log(`[API CLIENT] Initialized with Base URL: ${BASE_API_URL}`);
 
 /**
  * Reusable Axios Client Instance configured with:

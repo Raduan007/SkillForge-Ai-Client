@@ -60,7 +60,10 @@ export class ClientRoadmapService {
    * Fetch single published roadmap by its unique slug identifier from MongoDB.
    */
   static async getRoadmapBySlug(slug: string): Promise<Roadmap> {
-    const response = await apiClient.get<Roadmap>(`/roadmaps/${slug}`);
+    const response = await apiClient.get<any>(`/roadmaps/${slug}`);
+    if (response.data && response.data.success && response.data.data) {
+      return response.data.data;
+    }
     return response.data;
   }
 
@@ -68,7 +71,10 @@ export class ClientRoadmapService {
    * Fetch single roadmap by its ID from MongoDB.
    */
   static async getRoadmapById(id: string): Promise<Roadmap> {
-    const response = await apiClient.get<Roadmap>(`/roadmaps/${id}`);
+    const response = await apiClient.get<any>(`/roadmaps/${id}`);
+    if (response.data && response.data.success && response.data.data) {
+      return response.data.data;
+    }
     return response.data;
   }
 
