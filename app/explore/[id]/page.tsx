@@ -23,7 +23,7 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
   const { id } = React.use(params);
 
   // TanStack Query hooks integration
-  const { data: roadmap, isLoading: isLoadingDetail, isError: isDetailError } = useRoadmapBySlug(id);
+  const { data: roadmap, isLoading: isLoadingDetail, isError: isDetailError, error: detailError, refetch } = useRoadmapBySlug(id);
   const { data: relatedData, isLoading: isRelatedLoading } = useRoadmaps({ limit: 5 });
 
   // Map related roadmaps dynamically (filtering out active details view slug)
@@ -94,12 +94,87 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
     }
   };
 
+  const is404 = detailError && typeof detailError === "object" && 
+                "response" in detailError && 
+                (detailError as any).response?.status === 404;
+
   if (isLoadingDetail) {
     return (
+      <PageWrapper className="bg-slate-50 dark:bg-[#090d16] select-none min-h-screen animate-pulse">
+        {/* Header Navigation Bar Skeleton */}
+        <div className="bg-white dark:bg-[#090d16] py-3.5 border-b border-border-color dark:border-slate-800/30">
+          <Container>
+            <Flex align="center" justify="between" className="flex-wrap gap-4">
+              <div className="h-4 w-28 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="h-4 w-40 bg-slate-200 dark:bg-slate-800 rounded" />
+            </Flex>
+          </Container>
+        </div>
+
+        <Section className="py-8 md:py-12">
+          <Container>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Column Skeleton */}
+              <div className="lg:col-span-8 flex flex-col gap-8">
+                <div className="bg-white dark:bg-[#090d16] border border-border-color dark:border-slate-800/40 rounded-2xl p-6 md:p-8 flex flex-col gap-6">
+                  <div className="h-5 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
+                  <div className="h-10 w-3/4 bg-slate-200 dark:bg-slate-800 rounded" />
+                  <Flex gap={4} className="pb-4 border-b border-border-color dark:border-slate-800/30">
+                    <div className="h-6 w-20 bg-slate-200 dark:bg-slate-800 rounded-full" />
+                    <div className="h-6 w-24 bg-slate-200 dark:bg-slate-800 rounded-full" />
+                    <div className="h-6 w-28 bg-slate-200 dark:bg-slate-800 rounded-full" />
+                  </Flex>
+                  <div className="flex flex-col gap-3">
+                    <div className="h-5 w-36 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                    <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+                    <div className="h-4 w-5/6 bg-slate-200 dark:bg-slate-800 rounded" />
+                  </div>
+                  <div className="flex flex-col gap-4 mt-4">
+                    <div className="h-5 w-40 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="h-16 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column Skeleton */}
+              <div className="lg:col-span-4 flex flex-col gap-6">
+                <div className="bg-white dark:bg-[#090d16] border border-border-color dark:border-slate-800/40 rounded-2xl p-6 shadow-xs flex flex-col gap-6">
+                  <div className="aspect-video w-full bg-slate-200 dark:bg-slate-800 rounded-xl" />
+                  <div className="flex flex-col gap-3">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="h-5 w-full bg-slate-100 dark:bg-slate-900 rounded" />
+                    ))}
+                  </div>
+                  <div className="h-10 w-full bg-slate-200 dark:bg-slate-800 rounded-xl" />
+                  <div className="h-10 w-full bg-slate-200 dark:bg-slate-800 rounded-xl" />
+                </div>
+              </div>
+            </div>
+          </Container>
+        </Section>
+      </PageWrapper>
+    );
+  }
+
+  if (is404) {
+    return (
       <PageWrapper className="bg-slate-50 dark:bg-[#090d16] flex items-center justify-center min-h-screen select-none">
-        <Flex direction="col" align="center" gap={4} className="text-center">
-          <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <span className="text-xs font-bold text-secondary-text">Retrieving roadmap details...</span>
+        <Flex direction="col" align="center" gap={4} className="text-center max-w-sm px-6">
+          <div className="h-14 w-14 rounded-full bg-amber-50 dark:bg-amber-950/20 text-amber-500 flex items-center justify-center font-bold text-2xl">404</div>
+          <h2 className="text-sm font-black text-dark-text uppercase tracking-wider">Roadmap Not Found</h2>
+          <p className="text-xxs text-secondary-text leading-relaxed">
+            The roadmap pathway with slug <span className="font-extrabold text-dark-text">&quot;{id}&quot;</span> does not exist or has been removed.
+          </p>
+          <Link href="/explore">
+            <Button variant="primary" size="medium" className="text-xs font-bold px-6">
+              Return to Explorer
+            </Button>
+          </Link>
         </Flex>
       </PageWrapper>
     );
@@ -109,14 +184,30 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
     return (
       <PageWrapper className="bg-slate-50 dark:bg-[#090d16] flex items-center justify-center min-h-screen select-none">
         <Flex direction="col" align="center" gap={4} className="text-center max-w-sm px-6">
-          <div className="h-12 w-12 rounded-full bg-red-50 dark:bg-red-950/20 text-red-500 flex items-center justify-center font-bold text-lg">!</div>
-          <h2 className="text-sm font-black text-dark-text uppercase tracking-wider">Error Loading Details</h2>
+          <div className="h-14 w-14 rounded-full bg-red-50 dark:bg-red-950/20 text-red-500 flex items-center justify-center font-bold text-2xl">!</div>
+          <h2 className="text-sm font-black text-dark-text uppercase tracking-wider">Connection Failure</h2>
           <p className="text-xxs text-secondary-text leading-relaxed">
-            We couldn&apos;t resolve this roadmap pathway slug database entry. Verify your link parameters or check server status.
+            We couldn&apos;t connect to the backend server to load this pathway. Verify your internet connection or server status.
           </p>
-          <Link href="/explore" className="text-xs font-bold text-primary hover:underline">
-            Return to Explorer
-          </Link>
+          <Flex gap={3}>
+            <Button
+              variant="primary"
+               size="medium"
+              onClick={() => refetch()}
+              className="text-xs font-bold px-6"
+            >
+              Retry Connection
+            </Button>
+            <Link href="/explore">
+              <Button
+                variant="outline"
+                size="medium"
+                className="text-xs font-bold px-6 border border-border-color dark:border-slate-800 text-dark-text"
+              >
+                Go Back
+              </Button>
+            </Link>
+          </Flex>
         </Flex>
       </PageWrapper>
     );
