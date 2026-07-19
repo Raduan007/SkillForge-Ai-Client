@@ -11,7 +11,8 @@ import {
   User, 
   GraduationCap,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Brain
 } from "lucide-react";
 
 interface DashboardSidebarProps {
@@ -37,6 +38,11 @@ export function DashboardSidebar({ isOpen, setIsOpen }: DashboardSidebarProps) {
       label: "Progress",
       href: "/dashboard/progress",
       icon: Trophy,
+    },
+    {
+      label: "Mock Interviews",
+      href: "/dashboard/interviews",
+      icon: Brain,
     },
     {
       label: "Profile",
