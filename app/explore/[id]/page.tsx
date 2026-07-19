@@ -12,6 +12,7 @@ import { cn } from "@/utils/cn";
 import { useRoadmapBySlug, useRoadmaps } from "@/hooks/useRoadmaps";
 import { useAuth } from "@/providers/AuthProvider";
 import { useMyEnrollments, useEnrollRoadmap } from "@/hooks/useEnrollments";
+import { useProgress, useUpdateProgress } from "@/hooks/useProgress";
 import { useRouter } from "next/navigation";
 
 interface PageProps {
@@ -39,6 +40,13 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
   const isEnrolled = roadmap
     ? enrollments.some((e) => e.roadmapId?._id === roadmap._id || (typeof e.roadmapId === "string" && e.roadmapId === roadmap._id))
     : false;
+
+  // Progress tracking queries & mutations
+  const { data: progressData } = useProgress(roadmap?._id || "", isEnrolled);
+  const updateProgressMutation = useUpdateProgress(roadmap?._id || "");
+
+  const completedNodes = progressData?.completedNodes || [];
+  const progressPercentage = progressData?.progressPercentage || 0;
 
   const handleEnroll = () => {
     if (!roadmap) return;
@@ -280,6 +288,25 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                   </Flex>
                 </Flex>
 
+                {/* Interactive User Progress Bar */}
+                {isEnrolled && (
+                  <div className="bg-emerald-50/20 dark:bg-emerald-950/10 border border-emerald-100/60 dark:border-emerald-900/20 rounded-2xl p-5 flex flex-col gap-2 select-none shadow-xxs">
+                    <div className="flex justify-between items-center text-xxs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                      <span>Your Learning Journey Progress</span>
+                      <span>{progressPercentage}% Completed</span>
+                    </div>
+                    <div className="h-2 w-full rounded-full bg-slate-100 dark:bg-slate-850 overflow-hidden">
+                      <div
+                        className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                        style={{ width: `${progressPercentage}%` }}
+                      />
+                    </div>
+                    <span className="text-[10px] text-secondary-text font-bold leading-relaxed mt-1">
+                      {completedNodes.length} of {roadmap.skills.length} skills mastered. Toggle individual skills below to track progress.
+                    </span>
+                  </div>
+                )}
+
                 {/* Section: Full description */}
                 <div className="flex flex-col gap-3">
                   <h2 className="text-sm font-black text-dark-text uppercase tracking-widest flex items-center gap-1.5">
@@ -300,15 +327,42 @@ export default function RoadmapDetailsPage({ params }: PageProps) {
                     <span>Skills You will Master</span>
                   </h2>
                   
-                  <div className="flex flex-wrap gap-2">
-                    {roadmap.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-[10px] font-bold text-dark-text bg-slate-50 dark:bg-slate-900 border border-border-color dark:border-slate-800 px-3 py-1 rounded-lg"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {roadmap.skills.map((skill) => {
+                      const isCompleted = completedNodes.includes(skill);
+                      return (
+                        <button
+                          key={skill}
+                          type="button"
+                          disabled={!isEnrolled || updateProgressMutation.isPending}
+                          onClick={() => {
+                            if (!isEnrolled) return;
+                            const exists = completedNodes.includes(skill);
+                            const nextNodes = exists
+                              ? completedNodes.filter((s) => s !== skill)
+                              : [...completedNodes, skill];
+                            updateProgressMutation.mutate(nextNodes);
+                          }}
+                          className={cn(
+                            "flex items-center gap-3 px-4 py-3 rounded-xl border text-left text-xs font-bold transition-all",
+                            isCompleted
+                              ? "bg-emerald-50/40 dark:bg-emerald-950/10 border-emerald-200 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400"
+                              : "bg-slate-50/50 dark:bg-slate-900/20 border-border-color dark:border-slate-800/40 text-dark-text hover:border-primary/20",
+                            !isEnrolled && "cursor-default hover:border-border-color dark:hover:border-slate-800/40"
+                          )}
+                        >
+                          <div className={cn(
+                            "h-5 w-5 rounded-md border flex items-center justify-center shrink-0 transition-colors",
+                            isCompleted
+                              ? "bg-emerald-500 border-transparent text-white"
+                              : "border-slate-300 dark:border-slate-700 bg-white dark:bg-[#090d16]"
+                          )}>
+                            {isCompleted && <CheckCircle className="h-3.5 w-3.5" />}
+                          </div>
+                          <span>{skill}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
