@@ -10,6 +10,7 @@ import { ProfileCard } from "@/components/dashboard/ProfileCard";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { useStreak } from "@/hooks/useStreak";
 import { 
   Sparkles, 
   ArrowRight, 
@@ -17,7 +18,8 @@ import {
   MessageSquare, 
   Map, 
   Compass, 
-  Zap 
+  Zap,
+  Flame 
 } from "lucide-react";
 
 export default function DashboardOverviewPage() {
@@ -32,13 +34,16 @@ export default function DashboardOverviewPage() {
     refetch 
   } = useMyEnrollments(!!user);
 
+  // Fetch live learning streak from backend
+  const { data: streakData, isLoading: isStreakLoading } = useStreak(!!user);
+
   // Compute stat metrics dynamically
   const totalEnrollments = enrollments.length;
   const activeRoadmaps = enrollments.filter((e) => e.status === "active").length;
   const completedRoadmaps = enrollments.filter((e) => e.status === "completed").length;
   
-  // Learning streak metric (mocked to 3 or dynamic if profile model extends it)
-  const learningStreak = 3;
+  // Learning streak metric
+  const learningStreak = streakData?.currentStreak || 0;
 
   const activeEnrollments = enrollments.filter((e) => e.status === "active").slice(0, 2);
 
@@ -89,7 +94,7 @@ export default function DashboardOverviewPage() {
       </div>
 
       {/* 2. Stats Grid Cards */}
-      {isLoading ? (
+      {isLoading || isStreakLoading ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((s) => (
             <div key={s} className="h-24 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 bg-white dark:bg-[#0c1220] animate-pulse" />
@@ -201,6 +206,46 @@ export default function DashboardOverviewPage() {
         <div className="lg:col-span-4 flex flex-col gap-6">
           {/* Profile Card */}
           <ProfileCard />
+
+          {/* Daily Learning Streak Widget */}
+          <div className="bg-white dark:bg-[#0c1220] border border-border-color dark:border-slate-800/40 rounded-2xl p-6 flex flex-col gap-4 select-none shadow-xxs">
+            <div className="flex justify-between items-center border-b border-border-color dark:border-slate-800/20 pb-3">
+              <h3 className="text-sm font-black text-dark-text uppercase tracking-wider flex items-center gap-2">
+                <Flame className="h-4.5 w-4.5 text-orange-500 fill-orange-500/10 animate-pulse" />
+                <span>Streak Tracker</span>
+              </h3>
+              <span className="text-[10px] font-bold text-orange-600 bg-orange-50 dark:bg-orange-950/20 dark:text-orange-400 px-2.5 py-0.5 rounded-full border border-orange-200/50 dark:border-orange-900/30">
+                {learningStreak} Days Active
+              </span>
+            </div>
+
+            {isStreakLoading ? (
+              <div className="h-16 bg-slate-50 dark:bg-slate-900/10 rounded-xl animate-pulse" />
+            ) : (
+              <div className="flex flex-col gap-2.5">
+                <div className="flex justify-between items-center text-xxs font-bold text-secondary-text">
+                  <span>Current Streak:</span>
+                  <span className="text-dark-text">{learningStreak} days</span>
+                </div>
+                <div className="flex justify-between items-center text-xxs font-bold text-secondary-text">
+                  <span>Best Streak Record:</span>
+                  <span className="text-dark-text">{streakData?.bestStreak || 0} days</span>
+                </div>
+                <div className="flex justify-between items-center text-xxs font-bold text-secondary-text">
+                  <span>Last Active Day:</span>
+                  <span className="text-dark-text">
+                    {streakData?.lastActiveDate
+                      ? new Date(streakData.lastActiveDate).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "Never"}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Quick Actions Panel */}
           <div className="bg-white dark:bg-[#0c1220] border border-border-color dark:border-slate-800/40 rounded-2xl p-6 flex flex-col gap-4 select-none shadow-xxs">

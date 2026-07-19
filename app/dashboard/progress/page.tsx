@@ -7,14 +7,18 @@ import { useMyEnrollments } from "@/hooks/useEnrollments";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { useAchievements } from "@/hooks/useAchievements";
 import { 
   Trophy, 
   Target, 
   Award, 
   Flame, 
-  TrendingUp, 
-  Star 
+  Star,
+  Compass,
+  Shield,
+  Lock
 } from "lucide-react";
+import { cn } from "@/utils/cn";
 
 export default function DashboardProgressPage() {
   const { user } = useAuth();
@@ -23,10 +27,18 @@ export default function DashboardProgressPage() {
   // Fetch real enrollments
   const { 
     data: enrollments = [], 
-    isLoading, 
+    isLoading: isEnrollmentsLoading, 
     isError, 
     refetch 
   } = useMyEnrollments(!!user);
+
+  // Fetch real Achievements feed
+  const { 
+    data: achievementsData = [], 
+    isLoading: isAchievementsLoading 
+  } = useAchievements(!!user);
+
+  const isLoading = isEnrollmentsLoading || isAchievementsLoading;
 
   // Compute metrics
   const totalEnrolled = enrollments.length;
@@ -38,33 +50,24 @@ export default function DashboardProgressPage() {
     ? Math.round(enrollments.reduce((sum, e) => sum + e.progress, 0) / totalEnrolled)
     : 0;
 
-  // Mocked achievements matching path milestones
-  const achievements = [
-    {
-      title: "First Step Forward",
-      desc: "Enrolled in your first career learning pathway",
-      unlocked: totalEnrolled > 0,
-      icon: Target,
-    },
-    {
-      title: "Quarter Master",
-      desc: "Reached 25% progress in any curriculum track",
-      unlocked: enrollments.some((e) => e.progress >= 25),
-      icon: TrendingUp,
-    },
-    {
-      title: "Halfway Hero",
-      desc: "Reached 50% progress in any curriculum track",
-      unlocked: enrollments.some((e) => e.progress >= 50),
-      icon: Star,
-    },
-    {
-      title: "Certified Pathfinder",
-      desc: "Completed 100% of any enrolled roadmap",
-      unlocked: completedRoadmaps > 0,
-      icon: Award,
-    },
-  ];
+  const resolveIcon = (iconName: string) => {
+    switch (iconName) {
+      case "Target":
+        return Target;
+      case "Compass":
+        return Compass;
+      case "Flame":
+        return Flame;
+      case "Award":
+        return Award;
+      case "Trophy":
+        return Trophy;
+      case "Shield":
+        return Shield;
+      default:
+        return Award;
+    }
+  };
 
   if (isError) {
     return (
@@ -272,33 +275,63 @@ export default function DashboardProgressPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {achievements.map((ach, idx) => {
-              const Icon = ach.icon;
+            {achievementsData.map((ach) => {
+              const Icon = resolveIcon(ach.icon);
               return (
                 <div
-                  key={idx}
-                  className={`border rounded-2xl p-5 flex gap-4 items-center select-none transition-all ${
+                  key={ach.type}
+                  className={cn(
+                    "border rounded-2xl p-5 flex gap-4 items-center select-none transition-all relative overflow-hidden",
                     ach.unlocked
                       ? "bg-white dark:bg-[#0c1220] border-border-color dark:border-slate-800/40 opacity-100 shadow-xxs"
-                      : "bg-slate-50/40 dark:bg-slate-900/10 border-slate-200/50 dark:border-slate-850/20 opacity-50"
-                  }`}
+                      : "bg-slate-50/40 dark:bg-slate-900/10 border-slate-200/50 dark:border-slate-850/20 opacity-70"
+                  )}
                 >
                   <div
-                    className={`h-10 w-10 rounded-xl border flex items-center justify-center shrink-0 ${
+                    className={cn(
+                      "h-10 w-10 rounded-xl border flex items-center justify-center shrink-0",
                       ach.unlocked
                         ? "bg-indigo-50 dark:bg-indigo-950/20 text-primary border-indigo-100 dark:border-indigo-900/30"
-                        : "bg-slate-100 text-secondary-text border-slate-200"
-                    }`}
+                        : "bg-slate-100 dark:bg-slate-900/40 text-secondary-text border-slate-250 dark:border-slate-800/60"
+                    )}
                   >
                     <Icon className="h-5 w-5" />
                   </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-xs font-bold text-dark-text leading-tight">
-                      {ach.title}
-                    </span>
+                  <div className="flex flex-col flex-1 min-w-0 gap-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-bold text-dark-text leading-tight truncate">
+                        {ach.title}
+                      </span>
+                      {ach.unlocked ? (
+                        <span className="text-[9px] font-black uppercase text-emerald-650 bg-emerald-50 dark:bg-emerald-950/20 px-1.5 py-0.5 rounded border border-emerald-200/50 dark:border-emerald-900/20">
+                          Unlocked
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-1 text-[9px] font-black text-secondary-text uppercase">
+                          <Lock className="h-3 w-3" />
+                          <span>Locked</span>
+                        </div>
+                      )}
+                    </div>
                     <span className="text-xxs text-secondary-text leading-normal">
-                      {ach.desc}
+                      {ach.description}
                     </span>
+
+                    {/* Progress indicator for locked/active achievements */}
+                    {!ach.unlocked && (
+                      <div className="flex flex-col gap-1 mt-1.5">
+                        <div className="flex justify-between items-center text-[9px] font-bold text-secondary-text">
+                          <span>Progress Tracker</span>
+                          <span className="text-dark-text">{ach.progressDisplay}</span>
+                        </div>
+                        <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-850 overflow-hidden">
+                          <div
+                            className="h-full bg-primary rounded-full transition-all duration-300"
+                            style={{ width: `${ach.progressPercentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
