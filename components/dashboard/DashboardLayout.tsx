@@ -44,7 +44,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <PageWrapper className="bg-slate-50 dark:bg-[#090d16] min-h-screen flex">
+    <div className="bg-slate-50 dark:bg-[#090d16] min-h-screen flex flex-row">
       {/* Mobile Sidebar backdrop overlay */}
       {isMobileOpen && (
         <div
@@ -71,6 +71,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </main>
       </div>
-    </PageWrapper>
+    </div>
   );
 }
