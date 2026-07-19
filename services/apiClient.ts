@@ -1,8 +1,27 @@
 import axios from "axios";
 import { handleApiError } from "./errorHandler";
 
-// Read Next.js env configuration
-const BASE_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+let rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
+// Defensive parsing to prevent relative URL and missing protocol/path suffix issues:
+if (rawApiUrl) {
+  rawApiUrl = rawApiUrl.replace(/['"]/g, "").trim();
+  
+  // Ensure it has a protocol prefix
+  if (!rawApiUrl.startsWith("http://") && !rawApiUrl.startsWith("https://")) {
+    rawApiUrl = `https://${rawApiUrl}`;
+  }
+  
+  // Ensure it has the /api path suffix
+  if (!rawApiUrl.endsWith("/api")) {
+    if (rawApiUrl.endsWith("/")) {
+      rawApiUrl = rawApiUrl.slice(0, -1);
+    }
+    rawApiUrl = `${rawApiUrl}/api`;
+  }
+}
+
+const BASE_API_URL = rawApiUrl;
 
 /**
  * Reusable Axios Client Instance configured with:
