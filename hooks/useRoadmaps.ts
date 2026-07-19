@@ -9,7 +9,8 @@ export function useRoadmaps(query: GetRoadmapsQuery) {
     queryKey: ["roadmaps", query],
     queryFn: () => ClientRoadmapService.getRoadmaps(query),
     placeholderData: (previousData) => previousData, // keep previous data for paginated transitions
-    staleTime: 5000, // 5 seconds fresh status
+    staleTime: 30000, // 30 seconds cache fresh time
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -21,7 +22,8 @@ export function useRoadmapBySlug(slug: string) {
     queryKey: ["roadmap", slug],
     queryFn: () => ClientRoadmapService.getRoadmapBySlug(slug),
     enabled: !!slug,
-    staleTime: 10000, // 10 seconds fresh status
+    staleTime: 60000, // 60 seconds cache fresh time
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -33,7 +35,8 @@ export function useRoadmapById(id: string) {
     queryKey: ["roadmap-id", id],
     queryFn: () => ClientRoadmapService.getRoadmapById(id),
     enabled: !!id,
-    staleTime: 10000, // 10 seconds fresh status
+    staleTime: 60000, // 60 seconds cache fresh time
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -44,6 +47,7 @@ export function useFeaturedRoadmaps() {
   return useQuery({
     queryKey: ["roadmaps-featured"],
     queryFn: () => ClientRoadmapService.getFeaturedRoadmaps(),
-    staleTime: 10000, // 10 seconds fresh status
+    staleTime: 120000, // 2 minutes cache fresh time
+    refetchOnWindowFocus: false,
   });
 }

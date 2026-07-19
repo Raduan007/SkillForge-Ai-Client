@@ -3,11 +3,13 @@
 import * as React from "react";
 import { Info } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { PageWrapper, Section, Container, Flex } from "@/components/layout/Layouts";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { SortDropdown } from "@/components/shared/SortDropdown";
 import { Pagination } from "@/components/shared/Pagination";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRoadmaps } from "@/hooks/useRoadmaps";
 
@@ -27,7 +29,7 @@ export default function ExplorePage() {
   const debouncedSearch = useDebounce(searchVal, 400);
 
   // TanStack Query custom hook integration
-  const { data, isLoading, isError } = useRoadmaps({
+  const { data, isLoading, isError, refetch } = useRoadmaps({
     page: currentPage,
     limit: 12,
     search: debouncedSearch,
@@ -41,7 +43,7 @@ export default function ExplorePage() {
   const totalResults = data?.pagination.total || 0;
 
   const showSkeletons = isLoading;
-  const showEmptyState = (roadmaps.length === 0 && !isLoading) || isError;
+  const showEmptyState = roadmaps.length === 0 && !isLoading && !isError;
 
   return (
     <PageWrapper className="bg-slate-50 dark:bg-[#090d16] select-none min-h-screen">
@@ -91,15 +93,31 @@ export default function ExplorePage() {
           {/* Results count label */}
           <div className="flex items-center justify-between border-b border-border-color dark:border-slate-800/40 pb-4 mb-6">
             <span className="text-xs font-bold text-secondary-text">
-              {showEmptyState ? "Showing 0 matches" : `Showing ${totalResults} career paths matched`}
+              {isError ? "Error loading roadmaps" : showEmptyState ? "Showing 0 matches" : `Showing ${totalResults} career paths matched`}
             </span>
           </div>
 
           {/* ================= Main Layout Content Grid ================= */}
           <div className="flex flex-col gap-8 w-full">
             
-            {/* Dynamic Empty / Skeletons / Cards Content */}
-            {showEmptyState ? (
+            {/* Dynamic Error / Empty / Skeletons / Cards Content */}
+            {isError ? (
+              <div className="py-16 flex flex-col items-center gap-4 text-center max-w-md mx-auto">
+                <div className="h-12 w-12 rounded-full bg-red-50 dark:bg-red-950/20 text-red-500 flex items-center justify-center font-bold text-xl">!</div>
+                <h3 className="text-sm font-black text-dark-text uppercase">Connection Error</h3>
+                <p className="text-xxs text-secondary-text leading-relaxed">
+                  We encountered an issue retrieving our career path roadmap data from the backend server.
+                </p>
+                <Button
+                  variant="primary"
+                  size="medium"
+                  onClick={() => refetch()}
+                  className="text-xs font-bold px-6 py-2"
+                >
+                  Retry Load
+                </Button>
+              </div>
+            ) : showEmptyState ? (
               /* Empty state render */
               <Card
                 isEmpty={true}
@@ -124,7 +142,7 @@ export default function ExplorePage() {
                 ) : (
                   // Render loaded MongoDB roadmaps
                   roadmaps.map((roadmap) => (
-                    <div key={roadmap._id} className="flex flex-col h-full w-full">
+                    <Link href={`/explore/${roadmap.slug}`} key={roadmap._id} className="flex flex-col h-full w-full">
                       <Card
                         isSkeleton={false}
                         imageSrc={roadmap.coverImage}
@@ -133,17 +151,16 @@ export default function ExplorePage() {
                         description={roadmap.shortDescription}
                         metadata={[roadmap.difficulty, roadmap.duration, `★ ${roadmap.rating.toFixed(1)}`, roadmap.category]}
                         actionLabel="View Details"
-                        onAction={() => router.push(`/explore/${roadmap.slug}`)}
-                        className="h-full border-border-color/60 dark:border-slate-800/40"
+                        className="h-full cursor-pointer border-border-color/60 dark:border-slate-800/40"
                       />
-                    </div>
+                    </Link>
                   ))
                 )}
               </div>
             )}
 
             {/* ================= Pagination Section ================= */}
-            {!showEmptyState && (
+            {!showEmptyState && !isError && (
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
