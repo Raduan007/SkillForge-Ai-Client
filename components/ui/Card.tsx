@@ -54,29 +54,29 @@ const Card: React.FC<CardProps> = ({
     return (
       <div
         className={cn(
-          "flex flex-col h-full w-full rounded-xl border border-border-color bg-white shadow-sm overflow-hidden select-none animate-pulse",
+          "flex flex-col h-full w-full rounded-xl border border-border-color dark:border-slate-800/40 bg-white dark:bg-[#0c1220] shadow-sm overflow-hidden select-none animate-pulse",
           className
         )}
       >
         {/* Skeleton Image */}
-        <div className="h-44 w-full bg-slate-200" />
+        <div className="h-44 w-full bg-slate-200 dark:bg-slate-800" />
         
         {/* Skeleton Body */}
         <div className="flex flex-col flex-1 p-5 gap-3.5">
           {/* Skeleton Metadata */}
           <div className="flex gap-2">
-            <div className="h-5 w-16 rounded-full bg-slate-200" />
-            <div className="h-5 w-20 rounded-full bg-slate-200" />
+            <div className="h-5 w-16 rounded-full bg-slate-200 dark:bg-slate-800" />
+            <div className="h-5 w-20 rounded-full bg-slate-200 dark:bg-slate-800" />
           </div>
           {/* Skeleton Title */}
-          <div className="h-6 w-3/4 rounded bg-slate-200" />
+          <div className="h-6 w-3/4 rounded bg-slate-200 dark:bg-slate-800" />
           {/* Skeleton Description */}
           <div className="flex flex-col gap-2 flex-1">
-            <div className="h-4 w-full rounded bg-slate-200" />
-            <div className="h-4 w-5/6 rounded bg-slate-200" />
+            <div className="h-4 w-full rounded bg-slate-200 dark:bg-slate-800" />
+            <div className="h-4 w-5/6 rounded bg-slate-200 dark:bg-slate-800" />
           </div>
           {/* Skeleton Button */}
-          <div className="h-10 w-full rounded-lg bg-slate-200 mt-2" />
+          <div className="h-10 w-full rounded-lg bg-slate-200 dark:bg-slate-800 mt-2" />
         </div>
       </div>
     );
@@ -182,7 +182,7 @@ const Card: React.FC<CardProps> = ({
               onClick={onAction}
               variant="outline"
               size="medium"
-              className="w-full text-xs font-bold border border-border-color text-dark-text group-hover:bg-primary group-hover:text-white group-hover:border-transparent transition-all duration-200"
+              className="w-full text-xs font-bold border border-border-color text-dark-text group-hover:bg-primary group-hover:text-white group-hover:border-transparent hover:!bg-primary-dark hover:!text-white hover:!border-primary-dark transition-all duration-200"
             >
               {actionLabel}
             </Button>

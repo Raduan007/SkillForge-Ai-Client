@@ -134,7 +134,7 @@ export default function ExplorePage() {
               />
             ) : (
               /* Card List grid */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {showSkeletons ? (
                   // Render 8 skeleton cards
                   Array.from({ length: 8 }).map((_, idx) => (

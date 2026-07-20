@@ -31,9 +31,11 @@ export default function MyRoadmapsPage() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {[1, 2, 3].map((s) => (
-            <div key={s} className="h-72 rounded-2xl border border-slate-250/60 dark:border-slate-800 bg-white dark:bg-[#0c1220] animate-pulse" />
+            <div key={s} className="flex flex-col h-full w-full">
+              <Card isSkeleton={true} className="h-full border-slate-200/80 dark:border-slate-800/80" />
+            </div>
           ))}
         </div>
       ) : isError || enrollments.length === 0 ? (
@@ -47,7 +49,7 @@ export default function MyRoadmapsPage() {
           className="py-16 border-dashed bg-white dark:bg-[#0c1220]"
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {enrollments.map((enroll) => {
             const roadmap = enroll.roadmapId;
             if (!roadmap) return null;
