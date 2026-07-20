@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { useFeaturedRoadmaps } from "@/hooks/useRoadmaps";
 import { Card } from "@/components/ui/Card";
 import { Container, Section, Flex } from "@/components/layout/Layouts";
@@ -24,18 +25,32 @@ export default function FeaturedCareers() {
         
         {/* ================= Header Title ================= */}
         <Flex justify="between" align="end" className="mb-10 flex-wrap gap-4">
-          <div className="flex flex-col gap-2 max-w-2xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col gap-2 max-w-2xl"
+          >
             <h2 className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight">
               Featured Career Paths
             </h2>
             <p className="text-xs text-secondary-text leading-relaxed">
               Explore our customized learning journeys designed by tech veterans. Select a roadmap, pass assessments, and get hired.
             </p>
-          </div>
+          </motion.div>
         </Flex>
 
         {/* ================= Grid Layout Cards ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } }
+          }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
           {showSkeletons ? (
             // Render 4 skeleton loaders
             Array.from({ length: 4 }).map((_, idx) => (
@@ -54,7 +69,14 @@ export default function FeaturedCareers() {
           ) : (
             // Render actual roadmaps using reused Card component
             displayedRoadmaps.map((roadmap) => (
-              <div key={roadmap._id} className="flex flex-col h-full w-full">
+              <motion.div 
+                key={roadmap._id} 
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
+                }}
+                className="flex flex-col h-full w-full"
+              >
                 <Card
                   isSkeleton={false}
                   imageSrc={roadmap.coverImage}
@@ -71,10 +93,10 @@ export default function FeaturedCareers() {
                   onAction={() => router.push(`/explore/${roadmap.slug}`)}
                   className="h-full border-border-color/60 dark:border-slate-800/40"
                 />
-              </div>
+              </motion.div>
             ))
           )}
-        </div>
+        </motion.div>
 
         {/* ================= View All Roadmaps CTA Button ================= */}
         <Flex justify="center" className="mt-12">

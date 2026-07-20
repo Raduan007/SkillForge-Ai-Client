@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { apiClient } from "@/services/apiClient";
@@ -46,10 +47,7 @@ function LoginForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-
+  const performLogin = async (loginEmail: string, loginPass: string) => {
     setIsLoading(true);
     const loadingToastId = toast.loading("Signing you in...");
 
@@ -61,7 +59,7 @@ function LoginForm() {
           accessToken: string;
           user: import("@/providers/AuthProvider").SafeUser;
         };
-      }>("/auth/login", { email, password });
+      }>("/auth/login", { email: loginEmail, password: loginPass });
 
       const result = response.data;
 
@@ -89,13 +87,22 @@ function LoginForm() {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    await performLogin(email, password);
+  };
+
   return (
     <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-slate-50 dark:bg-[#090d16] select-none">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex flex-col items-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary p-0.5 shadow-md shadow-primary/10 mb-4">
-          <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white dark:bg-[#090d16]">
-            <Compass className="h-6 w-6 text-primary" />
-          </div>
+        <div className="relative h-12 w-12 mb-4">
+          <Image 
+            src="/assets/logo.png" 
+            alt="SkillForge AI Logo" 
+            fill
+            className="object-contain"
+          />
         </div>
         <h2 className="text-center text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
           Sign in to SkillForge AI
@@ -105,6 +112,35 @@ function LoginForm() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-[#0c1220] py-8 px-4 shadow-xl rounded-xl border border-border-color dark:border-slate-800/50 sm:px-10">
+          
+          <div className="mb-6 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+            <p className="text-xs font-bold text-secondary-text mb-3 text-center uppercase tracking-wider">Quick Login</p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => { 
+                  setEmail("user123@gmail.com"); 
+                  setPassword("User123@gmail.com"); 
+                  performLogin("user123@gmail.com", "User123@gmail.com"); 
+                }}
+                className="py-2 px-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-lg text-sm font-semibold transition-colors"
+              >
+                Demo User
+              </button>
+              <button
+                type="button"
+                onClick={() => { 
+                  setEmail("admin123@gmail.com"); 
+                  setPassword("Admin123@gmail.com"); 
+                  performLogin("admin123@gmail.com", "Admin123@gmail.com"); 
+                }}
+                className="py-2 px-3 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/20 rounded-lg text-sm font-semibold transition-colors"
+              >
+                Demo Admin
+              </button>
+            </div>
+          </div>
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <Input
               label="Email Address"

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Compass,
   Mail,
@@ -28,15 +29,18 @@ export default function Footer() {
       <Container>
         
         {/* ================= Top Grid Column Info ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-10">
           
-          {/* Logo & Description Column (Span 4) */}
-          <div className="flex flex-col gap-4 md:col-span-5">
+          {/* Logo & Description Column (Span 4/5) */}
+          <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-5 items-center text-center sm:items-start sm:text-left">
             <Link href="/" className="flex items-center gap-2 group w-fit">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary p-0.5 shadow-xs transition-transform group-hover:scale-[1.03]">
-                <div className="flex h-full w-full items-center justify-center rounded-[6px] bg-white dark:bg-[#090d16]">
-                  <Compass className="h-5 w-5 text-primary group-hover:text-primary-light transition-colors" />
-                </div>
+              <div className="relative h-9 w-9 transition-transform group-hover:scale-[1.03]">
+                <Image 
+                  src="/assets/logo.png" 
+                  alt="SkillForge AI Logo" 
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="text-lg font-black tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 SkillForge AI
@@ -48,7 +52,7 @@ export default function Footer() {
             </p>
 
             {/* Social Icons with hover effects (Inline SVG definitions to bypass lucide brand exports differences) */}
-            <Flex gap={3} className="mt-2">
+            <Flex gap={3} className="mt-2 justify-center sm:justify-start">
               <a
                 href="https://github.com"
                 target="_blank"
@@ -97,11 +101,11 @@ export default function Footer() {
           </div>
 
           {/* Quick Links Column (Span 2) */}
-          <div className="flex flex-col gap-3.5 md:col-span-2">
+          <div className="flex flex-col gap-3.5 sm:col-span-1 lg:col-span-2 items-center text-center sm:items-start sm:text-left">
             <span className="text-[10px] font-bold text-dark-text uppercase tracking-widest">
               Quick Links
             </span>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 items-center sm:items-start">
               <Link href="/" className="text-xxs md:text-xs text-secondary-text hover:text-primary dark:hover:text-primary-light transition-all w-fit">
                 Home
               </Link>
@@ -121,11 +125,11 @@ export default function Footer() {
           </div>
 
           {/* Resources Column (Span 2) */}
-          <div className="flex flex-col gap-3.5 md:col-span-2">
+          <div className="flex flex-col gap-3.5 sm:col-span-1 lg:col-span-2 items-center text-center sm:items-start sm:text-left">
             <span className="text-[10px] font-bold text-dark-text uppercase tracking-widest">
               Resources
             </span>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 items-center sm:items-start">
               <Link href="/docs" className="text-xxs md:text-xs text-secondary-text hover:text-primary dark:hover:text-primary-light transition-all w-fit">
                 Documentation
               </Link>
@@ -145,11 +149,11 @@ export default function Footer() {
           </div>
 
           {/* Contact Information Column (Span 3) */}
-          <div className="flex flex-col gap-3.5 md:col-span-3">
+          <div className="flex flex-col gap-3.5 sm:col-span-2 lg:col-span-3 items-center text-center sm:items-start sm:text-left">
             <span className="text-[10px] font-bold text-dark-text uppercase tracking-widest">
               Get in Touch
             </span>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 items-center sm:items-start">
               <Flex align="center" gap={2} className="text-xxs md:text-xs text-secondary-text">
                 <Mail className="h-4 w-4 text-primary shrink-0" />
                 <span className="truncate">support@skillforge.ai</span>
@@ -164,12 +168,12 @@ export default function Footer() {
         </div>
 
         {/* ================= Bottom copyright footer segment ================= */}
-        <Flex align="center" justify="between" className="border-t border-border-color dark:border-slate-800/40 pt-8 flex-wrap gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between border-t border-border-color dark:border-slate-800/40 pt-8 gap-4 text-center sm:text-left">
           <span className="text-[11px] font-medium text-secondary-text">
             &copy; {currentYear} SkillForge AI. All rights reserved.
           </span>
 
-          <Flex align="center" gap={4} className="flex-wrap">
+          <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-end">
             <Link href="/privacy" className="text-[11px] font-semibold text-secondary-text hover:text-dark-text transition-all">
               Privacy Policy
             </Link>
@@ -186,8 +190,8 @@ export default function Footer() {
             >
               <ArrowUp className="h-4 w-4" />
             </button>
-          </Flex>
-        </Flex>
+          </div>
+        </div>
 
       </Container>
     </footer>

@@ -48,15 +48,33 @@ export default function FAQSection() {
         
         {/* ================= Header Title ================= */}
         <Flex direction="col" align="center" className="text-center mb-10 gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-primary mb-1 animate-pulse">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-primary mb-1 animate-pulse"
+          >
             <HelpCircle className="h-5 w-5" />
-          </div>
-          <h2 className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight">
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight"
+          >
             Frequently Asked Questions
-          </h2>
-          <p className="text-xs text-secondary-text max-w-xl leading-relaxed">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xs text-secondary-text max-w-xl leading-relaxed"
+          >
             Got questions about roadmaps, career matching quizzes, or AI mentoring credits? Find answers below.
-          </p>
+          </motion.p>
         </Flex>
 
         {/* ================= Accordion List ================= */}

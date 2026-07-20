@@ -54,16 +54,34 @@ export default function AIFeaturesSection() {
         {/* ================= Header Title ================= */}
         <Flex direction="col" align="center" className="text-center mb-12 gap-3">
           {/* Animated decorative spark */}
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-primary mb-1 animate-pulse">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-primary mb-1 animate-pulse"
+          >
             <Sparkles className="h-5 w-5" />
-          </div>
+          </motion.div>
           
-          <h2 className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight"
+          >
             AI-Powered Career Building
-          </h2>
-          <p className="text-xs text-secondary-text max-w-xl leading-relaxed">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xs text-secondary-text max-w-xl leading-relaxed"
+          >
             SkillForge AI embeds advanced large language models directly into your learning flow to construct paths, recommend jobs, and mentor you 24/7.
-          </p>
+          </motion.p>
         </Flex>
 
         {/* ================= Grid Cards ================= */}

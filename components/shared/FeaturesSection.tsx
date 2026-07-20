@@ -67,12 +67,24 @@ export default function FeaturesSection() {
         
         {/* ================= Header Title ================= */}
         <Flex direction="col" align="center" className="text-center mb-12 gap-3">
-          <h2 className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-2xl font-black text-dark-text md:text-3xl lg:text-4xl tracking-tight leading-tight"
+          >
             Platform Capabilities
-          </h2>
-          <p className="text-xs text-secondary-text max-w-xl leading-relaxed">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-xs text-secondary-text max-w-xl leading-relaxed"
+          >
             SkillForge AI blends state-of-the-art AI generation tools with proven learning principles to speed up your career transition.
-          </p>
+          </motion.p>
         </Flex>
 
         {/* ================= Features Grid ================= */}

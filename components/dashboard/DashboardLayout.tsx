@@ -55,7 +55,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Sidebar container */}
       <DashboardSidebar 
-        isOpen={isSidebarOpen || isMobileOpen} 
+        isOpen={isSidebarOpen} 
+        isMobileOpen={isMobileOpen}
         setIsOpen={setIsSidebarOpen} 
       />
 

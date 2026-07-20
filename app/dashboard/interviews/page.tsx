@@ -133,10 +133,11 @@ export default function InterviewsDashboardPage() {
                     </div>
                     <Link
                       href={`/dashboard/interviews/${interview._id}`}
-                      className="p-2 hover:bg-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors"
-                      title="View Details"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 rounded-lg text-sm font-medium transition-colors"
+                      title="View Report"
                     >
-                      <ChevronRight className="w-5 h-5" />
+                      View Report
+                      <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>

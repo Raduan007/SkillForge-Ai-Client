@@ -47,7 +47,13 @@ export default function CTASection() {
       <Container className="relative z-10 max-w-4xl text-center">
         
         {/* ================= Content Card ================= */}
-        <div className="rounded-3xl border border-border-color/60 dark:border-slate-800/40 bg-slate-50/40 dark:bg-slate-850/5 p-8 md:p-14 backdrop-blur-md shadow-sm flex flex-col items-center gap-6">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95, y: 30 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, type: "spring", bounce: 0.3 }}
+          className="rounded-3xl border border-border-color/60 dark:border-slate-800/40 bg-slate-50/40 dark:bg-slate-850/5 p-8 md:p-14 backdrop-blur-md shadow-sm flex flex-col items-center gap-6"
+        >
           
           {/* Animated Glowing Spark */}
           <motion.div
@@ -105,7 +111,7 @@ export default function CTASection() {
 
           </Flex>
 
-        </div>
+        </motion.div>
 
       </Container>
     </Section>

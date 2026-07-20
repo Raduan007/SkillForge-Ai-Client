@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
 import { 
@@ -12,16 +13,23 @@ import {
   GraduationCap,
   ChevronLeft,
   ChevronRight,
-  Brain
+  Brain,
+  Shield,
+  Users,
+  Settings
 } from "lucide-react";
+import { useAuth } from "@/providers/AuthProvider";
 
 interface DashboardSidebarProps {
   isOpen: boolean;
+  isMobileOpen?: boolean;
   setIsOpen: (open: boolean) => void;
 }
 
-export function DashboardSidebar({ isOpen, setIsOpen }: DashboardSidebarProps) {
+export function DashboardSidebar({ isOpen, isMobileOpen = false, setIsOpen }: DashboardSidebarProps) {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const showLabels = isOpen || isMobileOpen;
 
   const navigationItems = [
     {
@@ -55,17 +63,24 @@ export function DashboardSidebar({ isOpen, setIsOpen }: DashboardSidebarProps) {
     <aside
       className={cn(
         "fixed inset-y-0 left-0 z-20 flex flex-col border-r border-border-color dark:border-slate-800/40 bg-white dark:bg-[#0c1220] transition-all duration-300",
-        isOpen ? "w-64" : "w-20",
+        isMobileOpen ? "translate-x-0 w-64" : "-translate-x-full w-64",
+        "lg:translate-x-0",
+        isOpen ? "lg:w-64" : "lg:w-20",
         "lg:static lg:h-[calc(100vh-65px)] lg:z-0"
       )}
     >
       {/* Brand logo container */}
       <div className="flex h-16 items-center justify-between px-6 border-b border-border-color dark:border-slate-800/20">
         <Link href="/dashboard" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-primary to-indigo-600 text-white shadow-md shadow-primary/20">
-            <GraduationCap className="h-5 w-5" />
+          <div className="relative h-8 w-8 transition-transform group-hover:scale-[1.03]">
+            <Image 
+              src="/assets/logo.png" 
+              alt="SkillForge AI Logo" 
+              fill
+              className="object-contain"
+            />
           </div>
-          {isOpen && (
+          {showLabels && (
             <span className="text-sm font-black text-dark-text tracking-tight uppercase group-hover:text-primary transition-colors">
               SkillForge <span className="text-primary">AI</span>
             </span>
@@ -91,8 +106,8 @@ export function DashboardSidebar({ isOpen, setIsOpen }: DashboardSidebarProps) {
               )}
             >
               <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-white" : "text-secondary-text group-hover:text-primary transition-colors")} />
-              {isOpen && <span>{item.label}</span>}
-              {!isOpen && (
+              {showLabels && <span>{item.label}</span>}
+              {!showLabels && (
                 <div className="absolute left-full ml-3 px-2 py-1 bg-slate-950 text-white text-[10px] rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-md">
                   {item.label}
                 </div>
@@ -100,6 +115,70 @@ export function DashboardSidebar({ isOpen, setIsOpen }: DashboardSidebarProps) {
             </Link>
           );
         })}
+
+        {user?.role === "admin" && (
+          <>
+            {showLabels && (
+              <div className="px-3 pt-4 pb-2 text-[10px] font-black text-secondary-text uppercase tracking-widest">
+                Admin
+              </div>
+            )}
+            
+            <Link
+              href="/dashboard/admin"
+              className={cn(
+                "flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 group relative",
+                pathname === "/dashboard/admin"
+                  ? "bg-primary text-white shadow-sm shadow-primary/10"
+                  : "text-secondary-text hover:bg-slate-50 dark:hover:bg-slate-900/40 hover:text-dark-text"
+              )}
+            >
+              <Shield className={cn("h-5 w-5 shrink-0", pathname === "/dashboard/admin" ? "text-white" : "text-secondary-text group-hover:text-primary transition-colors")} />
+              {showLabels && <span>Admin Stats</span>}
+              {!showLabels && (
+                <div className="absolute left-full ml-3 px-2 py-1 bg-slate-950 text-white text-[10px] rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-md">
+                  Admin Stats
+                </div>
+              )}
+            </Link>
+
+            <Link
+              href="/dashboard/admin/users"
+              className={cn(
+                "flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 group relative",
+                pathname.startsWith("/dashboard/admin/users")
+                  ? "bg-primary text-white shadow-sm shadow-primary/10"
+                  : "text-secondary-text hover:bg-slate-50 dark:hover:bg-slate-900/40 hover:text-dark-text"
+              )}
+            >
+              <Users className={cn("h-5 w-5 shrink-0", pathname.startsWith("/dashboard/admin/users") ? "text-white" : "text-secondary-text group-hover:text-primary transition-colors")} />
+              {showLabels && <span>Users</span>}
+              {!showLabels && (
+                <div className="absolute left-full ml-3 px-2 py-1 bg-slate-950 text-white text-[10px] rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-md">
+                  Users
+                </div>
+              )}
+            </Link>
+
+            <Link
+              href="/dashboard/admin/roadmaps"
+              className={cn(
+                "flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 group relative",
+                pathname.startsWith("/dashboard/admin/roadmaps")
+                  ? "bg-primary text-white shadow-sm shadow-primary/10"
+                  : "text-secondary-text hover:bg-slate-50 dark:hover:bg-slate-900/40 hover:text-dark-text"
+              )}
+            >
+              <Settings className={cn("h-5 w-5 shrink-0", pathname.startsWith("/dashboard/admin/roadmaps") ? "text-white" : "text-secondary-text group-hover:text-primary transition-colors")} />
+              {showLabels && <span>Roadmaps</span>}
+              {!showLabels && (
+                <div className="absolute left-full ml-3 px-2 py-1 bg-slate-950 text-white text-[10px] rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-md">
+                  Roadmaps
+                </div>
+              )}
+            </Link>
+          </>
+        )}
       </nav>
 
       {/* Toggle button */}

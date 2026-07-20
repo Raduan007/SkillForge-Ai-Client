@@ -89,79 +89,153 @@ export default function HeroSection() {
 
           </div>
 
-          {/* ================= Right Column: Interactive CSS Roadmap Mockup ================= */}
+          {/* ================= Right Column: Creative AI Roadmap Visualization ================= */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, x: 20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-6 flex items-center justify-center relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="lg:col-span-6 flex items-center justify-center relative w-full h-[400px] lg:h-[500px]"
           >
-            {/* Ambient glow behind card */}
-            <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-primary/10 to-secondary/15 blur-xl opacity-70" />
+            {/* Ambient background glow */}
+            <motion.div 
+              animate={{ 
+                scale: [1, 1.1, 1], 
+                rotate: [0, 90, 0]
+              }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 max-w-lg mx-auto bg-gradient-to-tr from-primary/30 via-secondary/20 to-indigo-500/30 blur-3xl rounded-full opacity-60 dark:opacity-40"
+            />
 
-            {/* Main Interactive Card */}
-            <div className="relative w-full max-w-md rounded-2xl border border-border-color/60 dark:border-slate-800/40 bg-white dark:bg-[#090d16] p-6 shadow-xl flex flex-col gap-6">
+            {/* Central Glass Container */}
+            <motion.div 
+              animate={{ y: [-15, 15, -15] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative w-full h-full max-w-lg max-h-[500px] rounded-[2rem] border border-white/20 bg-white/5 dark:bg-slate-900/40 backdrop-blur-xl shadow-2xl overflow-hidden flex items-center justify-center"
+            >
               
-              {/* Card Header */}
-              <Flex align="center" justify="between" className="border-b border-border-color dark:border-slate-850 pb-4">
-                <div className="flex flex-col">
-                  <span className="text-xxs font-bold text-secondary-text uppercase tracking-widest">Active Curriculum</span>
-                  <span className="text-sm font-extrabold text-dark-text">Frontend Developer Path</span>
-                </div>
-                <div className="h-2 w-16 rounded-full bg-slate-100 dark:bg-slate-850 overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: "66%" }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-primary to-secondary"
-                  />
-                </div>
-              </Flex>
+              {/* Dynamic SVG Connection Lines */}
+              <svg className="absolute inset-0 w-full h-full" style={{ filter: "drop-shadow(0 0 8px rgba(79,70,229,0.5))" }}>
+                 <motion.path 
+                   d="M 50% 50% Q 25% 30% 20% 20%" 
+                   stroke="url(#grad1)" strokeWidth="3" fill="none" strokeDasharray="5 5"
+                   initial={{ pathLength: 0, opacity: 0 }}
+                   animate={{ pathLength: 1, opacity: 0.6 }}
+                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                 />
+                 <motion.path 
+                   d="M 50% 50% Q 75% 30% 80% 25%" 
+                   stroke="url(#grad2)" strokeWidth="3" fill="none" strokeDasharray="5 5"
+                   initial={{ pathLength: 0, opacity: 0 }}
+                   animate={{ pathLength: 1, opacity: 0.6 }}
+                   transition={{ duration: 2.5, repeat: Infinity, ease: "linear", delay: 0.5 }}
+                 />
+                 <motion.path 
+                   d="M 50% 50% Q 50% 80% 50% 85%" 
+                   stroke="url(#grad1)" strokeWidth="3" fill="none" strokeDasharray="5 5"
+                   initial={{ pathLength: 0, opacity: 0 }}
+                   animate={{ pathLength: 1, opacity: 0.6 }}
+                   transition={{ duration: 2.2, repeat: Infinity, ease: "linear", delay: 1 }}
+                 />
+                 <defs>
+                   <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                     <stop offset="0%" stopColor="#4F46E5" />
+                     <stop offset="100%" stopColor="#10B981" />
+                   </linearGradient>
+                   <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                     <stop offset="0%" stopColor="#F59E0B" />
+                     <stop offset="100%" stopColor="#EC4899" />
+                   </linearGradient>
+                 </defs>
+              </svg>
 
-              {/* Roadmap Timeline Nodes */}
-              <div className="flex flex-col gap-5 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100 dark:before:bg-slate-850">
-                
-                {/* Node 1: Completed */}
-                <Flex align="center" gap={3} className="relative z-10">
-                  <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/20 flex items-center justify-center text-emerald-600 shrink-0">
-                    <CheckCircle2 className="h-4.5 w-4.5" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-xs font-bold text-dark-text">HTML & CSS Foundations</span>
-                    <span className="text-[10px] text-secondary-text font-semibold">Phase 1 • 6 Topics Completed</span>
-                  </div>
-                </Flex>
-
-                {/* Node 2: Active */}
-                <Flex align="center" gap={3} className="relative z-10">
-                  <motion.div
-                    animate={{ scale: [1, 1.05, 1], borderColor: ["#4F46E5", "#F59E0B", "#4F46E5"] }}
-                    transition={{ repeat: Infinity, duration: 4 }}
-                    className="h-8.5 w-8.5 rounded-full bg-indigo-50 dark:bg-indigo-950/20 border border-primary flex items-center justify-center text-primary shrink-0"
-                  >
-                    <Play className="h-3.5 w-3.5 fill-current ml-0.5 animate-pulse" />
-                  </motion.div>
-                  <div className="flex flex-col">
-                    <span className="text-xs font-bold text-primary dark:text-primary-light">JavaScript DOM Manipulation</span>
-                    <span className="text-[10px] text-secondary-text font-semibold">Phase 2 • Topic 4/8 In Progress</span>
-                  </div>
-                </Flex>
-
-                {/* Node 3: Locked */}
-                <Flex align="center" gap={3} className="relative z-10">
-                  <div className="h-8.5 w-8.5 rounded-full bg-slate-50 dark:bg-slate-900 border border-border-color dark:border-slate-800 flex items-center justify-center text-secondary-text shrink-0">
-                    <Lock className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-xs font-bold text-secondary-text">React Application State</span>
-                    <span className="text-[10px] text-secondary-text font-semibold">Phase 3 • Locked</span>
-                  </div>
-                </Flex>
-
+              {/* Central AI Core Node */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+                <motion.div 
+                  animate={{ scale: [1, 1.1, 1], boxShadow: ["0 0 20px rgba(79,70,229,0.5)", "0 0 40px rgba(79,70,229,0.8)", "0 0 20px rgba(79,70,229,0.5)"] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="h-20 w-20 rounded-2xl bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center shadow-2xl border border-white/20 rotate-45"
+                >
+                  <Sparkles className="h-8 w-8 text-white -rotate-45" />
+                </motion.div>
+                {/* Orbital Ring */}
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  className="absolute -inset-8 rounded-full border border-dashed border-primary/40"
+                />
               </div>
 
-            </div>
+              {/* Skill Nodes */}
+              {/* Node 1 (Top Left) */}
+              <motion.div 
+                 animate={{ y: [-5, 5, -5] }}
+                 transition={{ duration: 4, repeat: Infinity, delay: 0.5 }}
+                 className="absolute left-[10%] top-[15%] z-20"
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="h-12 w-12 rounded-full bg-slate-900 border border-emerald-500/50 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                    <span className="text-[10px] font-bold text-emerald-400">React</span>
+                  </div>
+                  <span className="px-2 py-1 rounded-md bg-white/10 backdrop-blur-sm border border-white/5 text-[9px] font-mono text-dark-text dark:text-white/80 font-semibold shadow-sm">Frontend</span>
+                </div>
+              </motion.div>
 
+              {/* Node 2 (Top Right) */}
+              <motion.div 
+                 animate={{ y: [-5, 5, -5] }}
+                 transition={{ duration: 5, repeat: Infinity, delay: 1.2 }}
+                 className="absolute right-[10%] top-[20%] z-20"
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="h-12 w-12 rounded-full bg-slate-900 border border-orange-500/50 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                    <span className="text-[10px] font-bold text-orange-400">Node.js</span>
+                  </div>
+                  <span className="px-2 py-1 rounded-md bg-white/10 backdrop-blur-sm border border-white/5 text-[9px] font-mono text-dark-text dark:text-white/80 font-semibold shadow-sm">Backend</span>
+                </div>
+              </motion.div>
+
+              {/* Node 3 (Bottom Center) */}
+              <motion.div 
+                 animate={{ y: [-5, 5, -5] }}
+                 transition={{ duration: 4.5, repeat: Infinity, delay: 0.8 }}
+                 className="absolute left-1/2 -translate-x-1/2 bottom-[15%] z-20"
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="h-12 w-12 rounded-full bg-slate-900 border border-purple-500/50 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                    <span className="text-[10px] font-bold text-purple-400">Python</span>
+                  </div>
+                  <span className="px-2 py-1 rounded-md bg-white/10 backdrop-blur-sm border border-white/5 text-[9px] font-mono text-dark-text dark:text-white/80 font-semibold shadow-sm">AI / ML</span>
+                </div>
+              </motion.div>
+
+              {/* Floating particles inside the container */}
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  animate={{ 
+                    y: [0, -100, 0], 
+                    x: [0, (i % 2 === 0 ? 50 : -50), 0],
+                    opacity: [0, 0.8, 0]
+                  }}
+                  transition={{ 
+                    duration: 5 + i * 2, 
+                    repeat: Infinity,
+                    delay: i * 0.5,
+                    ease: "linear"
+                  }}
+                  className="absolute bottom-1/4 h-1.5 w-1.5 rounded-full bg-primary/40 blur-[1px]"
+                  style={{ left: `${30 + i * 10}%` }}
+                />
+              ))}
+
+              {/* Scanning laser line overlay */}
+              <motion.div 
+                animate={{ top: ["0%", "100%", "0%"] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent shadow-[0_0_15px_rgba(79,70,229,0.6)] z-30 opacity-50"
+              />
+
+            </motion.div>
           </motion.div>
 
         </div>

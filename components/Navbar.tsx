@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -123,10 +124,13 @@ export default function Navbar() {
 
         {/* ================= Logo Segment ================= */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary p-0.5 shadow-md shadow-primary/10 transition-transform group-hover:scale-[1.03]">
-            <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white dark:bg-[#090d16] transition-colors group-hover:bg-transparent">
-              <Compass className="h-5.5 w-5.5 text-primary group-hover:text-white dark:group-hover:text-dark-text transition-colors duration-300" />
-            </div>
+          <div className="relative h-10 w-10 transition-transform group-hover:scale-[1.03]">
+            <Image 
+              src="/assets/logo.png" 
+              alt="SkillForge AI Logo" 
+              fill
+              className="object-contain"
+            />
           </div>
           <span className="text-xl font-black tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent group-hover:opacity-90 transition-opacity">
             SkillForge AI
