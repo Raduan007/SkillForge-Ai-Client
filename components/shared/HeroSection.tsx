@@ -64,7 +64,7 @@ export default function HeroSection() {
               transition={{ duration: 0.4, delay: 0.15 }}
               className="flex items-center gap-4 flex-wrap mt-2"
             >
-              <Link href="/dashboard" passHref legacyBehavior>
+              <Link href="/dashboard">
                 <Button
                   variant="primary"
                   size="large"
@@ -75,7 +75,7 @@ export default function HeroSection() {
                 </Button>
               </Link>
 
-              <Link href="/explore" passHref legacyBehavior>
+              <Link href="/explore">
                 <Button
                   variant="outline"
                   size="large"

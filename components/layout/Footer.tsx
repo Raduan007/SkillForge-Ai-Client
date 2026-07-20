@@ -39,6 +39,7 @@ export default function Footer() {
                   src="/assets/logo.png" 
                   alt="SkillForge AI Logo" 
                   fill
+                  sizes="36px"
                   className="object-contain"
                 />
               </div>

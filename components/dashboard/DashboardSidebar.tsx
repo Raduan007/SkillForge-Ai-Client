@@ -77,6 +77,7 @@ export function DashboardSidebar({ isOpen, isMobileOpen = false, setIsOpen }: Da
               src="/assets/logo.png" 
               alt="SkillForge AI Logo" 
               fill
+              sizes="32px"
               className="object-contain"
             />
           </div>

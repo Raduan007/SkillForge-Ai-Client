@@ -101,6 +101,7 @@ function LoginForm() {
             src="/assets/logo.png" 
             alt="SkillForge AI Logo" 
             fill
+            sizes="48px"
             className="object-contain"
           />
         </div>

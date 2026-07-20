@@ -129,6 +129,7 @@ export default function Navbar() {
               src="/assets/logo.png" 
               alt="SkillForge AI Logo" 
               fill
+              sizes="40px"
               className="object-contain"
             />
           </div>
