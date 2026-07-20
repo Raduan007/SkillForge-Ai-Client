@@ -14,8 +14,17 @@ export default function FeaturedCareers() {
   // Fetch real featured roadmaps from backend via TanStack Query
   const { data: featuredRoadmaps = [], isLoading, isError } = useFeaturedRoadmaps();
 
-  // Limit displayed items to 4 on the client
-  const displayedRoadmaps = featuredRoadmaps.slice(0, 4);
+  // Limit displayed items to 4 on the client, and pad with placeholders if less than 4
+  let displayedRoadmaps = featuredRoadmaps.slice(0, 4);
+  
+  // Pad the array with copies of existing roadmaps if there are less than 4, so the design doesn't break
+  if (displayedRoadmaps.length > 0 && displayedRoadmaps.length < 4) {
+    while (displayedRoadmaps.length < 4) {
+      // Clone the first item to fill the empty spots, appending a unique id suffix
+      const clone = { ...displayedRoadmaps[0], _id: `${displayedRoadmaps[0]._id}-${displayedRoadmaps.length}` };
+      displayedRoadmaps.push(clone);
+    }
+  }
 
   const showSkeletons = isLoading;
 
