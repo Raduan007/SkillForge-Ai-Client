@@ -112,6 +112,10 @@ function getQueryClient() {
 export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = getQueryClient();
 
+  React.useEffect(() => {
+    console.log("[APP] Layout mounted");
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>

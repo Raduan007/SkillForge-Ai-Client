@@ -9,9 +9,10 @@ import { toast } from "react-hot-toast";
 import { Input, PasswordInput } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { GoogleLoginButton } from "@/components/shared/GoogleLoginButton";
-import { Compass } from "lucide-react";
+import { Compass, Loader2 } from "lucide-react";
 
-export default function LoginPage() {
+// Inner component that uses useSearchParams — must be inside <Suspense>
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, user } = useAuth();
@@ -177,5 +178,20 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Suspense wrapper — prevents useSearchParams() from suspending the full route
+export default function LoginPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 dark:bg-[#090d16]">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </React.Suspense>
   );
 }

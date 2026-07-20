@@ -28,6 +28,7 @@ interface GoogleAccountsId {
       shape?: string;
       logo_alignment?: string;
       width?: number;
+      locale?: string;
     }
   ) => void;
   prompt: () => void;
@@ -44,6 +45,14 @@ declare global {
 }
 
 export const GoogleLoginButton: React.FC = () => {
+  return (
+    <React.Suspense fallback={<div className="w-full min-h-[44px]" />}>
+      <GoogleLoginButtonInner />
+    </React.Suspense>
+  );
+};
+
+const GoogleLoginButtonInner: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
@@ -59,7 +68,7 @@ export const GoogleLoginButton: React.FC = () => {
       return;
     }
 
-    const scriptSrc = "https://accounts.google.com/gsi/client";
+    const scriptSrc = "https://accounts.google.com/gsi/client?hl=en";
     const existingScript = document.querySelector(`script[src="${scriptSrc}"]`);
 
     if (existingScript) {
@@ -160,6 +169,7 @@ export const GoogleLoginButton: React.FC = () => {
             shape: "rectangular",
             logo_alignment: "left",
             width: parentElement.offsetWidth || 340, // fallback
+            locale: "en",
           });
         }
       }
@@ -186,6 +196,7 @@ export const GoogleLoginButton: React.FC = () => {
           shape: "rectangular",
           logo_alignment: "left",
           width: parentElement.offsetWidth || 340,
+          locale: "en",
         });
       }
     };

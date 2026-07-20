@@ -43,48 +43,72 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Load token and user from local storage on mount
   React.useEffect(() => {
+    console.log("[AUTH] Starting auth check");
+
+    // Abort controller with 5s deadline — prevents hanging on a slow/dead backend
+    const controller = new AbortController();
+    const authCheckTimeout = setTimeout(() => controller.abort(), 5000);
+
     const initializeAuth = async () => {
       try {
         const storedToken = safeLocalStorage.getItem<string>("skillforge-auth-token");
         const storedUser = safeLocalStorage.getItem<SafeUser>("skillforge-user");
 
         if (storedToken && storedUser) {
+          // Optimistically set the cached user immediately — app renders without waiting
           setToken(storedToken);
           setUser(storedUser);
 
-          // Validate token and get fresh user info from backend
+          // Validate token with backend in the background (soft refresh)
           try {
-            // Configure temporary header in case interceptor hasn't run yet
+            console.log("[AUTH] Request sent");
             const response = await apiClient.get<{ success: boolean; data: { user: SafeUser } }>(
               "/auth/me",
               {
-                headers: {
-                  Authorization: `Bearer ${storedToken}`,
-                },
+                headers: { Authorization: `Bearer ${storedToken}` },
+                signal: controller.signal,
               }
             );
+            console.log("[AUTH] Request finished");
 
             if (response.data.success) {
               const freshUser = response.data.data.user;
               setUser(freshUser);
               safeLocalStorage.setItem("skillforge-user", freshUser);
             } else {
-              // Session expired or invalid
+              // Session expired or invalid — log out silently
               handleLogout();
             }
-          } catch (err) {
-            console.error("[AuthProvider] Session validation failed:", err);
-            handleLogout();
+          } catch (err: unknown) {
+            // If the request was aborted (timeout) keep the cached user — don't log out
+            const isAbort =
+              (err instanceof Error && err.name === "AbortError") ||
+              (err instanceof Error && err.message === "canceled");
+            if (isAbort) {
+              console.warn("[AUTH] Session validation timed out — using cached credentials");
+            } else {
+              console.error("[AUTH] Session validation failed:", err);
+              handleLogout();
+            }
           }
         }
       } catch (err) {
         console.error("[AuthProvider] Initialization failed:", err);
       } finally {
+        // CRITICAL: always release the loading gate so the app renders
+        clearTimeout(authCheckTimeout);
         setIsLoading(false);
+        console.log("[AUTH] Loading false");
+        console.log("[AUTH] Auth check complete");
       }
     };
 
     initializeAuth();
+
+    return () => {
+      controller.abort();
+      clearTimeout(authCheckTimeout);
+    };
   }, [handleLogout]);
 
   const handleLogin = (newToken: string, newUser: SafeUser) => {

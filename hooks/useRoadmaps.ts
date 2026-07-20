@@ -49,5 +49,7 @@ export function useFeaturedRoadmaps() {
     queryFn: () => ClientRoadmapService.getFeaturedRoadmaps(),
     staleTime: 120000, // 2 minutes cache fresh time
     refetchOnWindowFocus: false,
+    retry: false, // don't retry on timeout \u2014 avoids doubling the 12s wait
   });
 }
+
